@@ -1,0 +1,34 @@
+{
+  "name": "@ednsdomains/lookup",
+  "version": "1.0.2",
+  "keywords": [
+    "ednsdomains"
+  ],
+  "author": "Mike Ng <iam@mikeng.io> Alex Wong<alex.wong@one2.cloud>",
+  "repository": "github:ednsdomains/sdk",
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "exports": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "type": "commonjs",
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@ensdomains/address-encoder": "^0.2.17",
+    "@nomiclabs/hardhat-ethers": "^2.1.0",
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/history": "*",
+    "@types/mocha": "^9.1.1",
+    "@types/react": "*",
+    "ethers": "^5.6.9",
+    "typescript": "^4.7.4"
+  }
+}
