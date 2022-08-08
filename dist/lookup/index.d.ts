@@ -1,3 +1,3 @@
 export { LookupAddress } from './address';
-export { LookUpText } from './text';
-export { TextType } from './text';
+export { LookUpText, TextType } from './text';
+export { LookupDomainFromAddress, SetReverseDomain } from './reverseDomain';
