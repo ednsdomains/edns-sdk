@@ -1,0 +1,1 @@
+export {GetEdnsProvider} from './provider'

@@ -21,4 +21,11 @@ const LookupAddress = async (domain: string, coinName: string): Promise<string |
         return undefined;
     }
 }
-export {LookupAddress};
+const WriteAddress = async (domain: string, coinName: string,address:string,signer: ethers.Signer): Promise<ethers.ContractTransaction> => {
+    const RESOLVER_CONTRACT_ADDRESS = '0x3c2DAab0AF88B0c5505ccB585e04FB33d7C80144';
+    const Resolver = ResolverFactory.connect(RESOLVER_CONTRACT_ADDRESS, signer);
+    const hash = namehash(domain);
+    const transaction = await Resolver["setAddr(bytes32,uint256,bytes)"](hash, formatsByName[coinName].coinType,ethers.utils.toUtf8Bytes(address));
+    return transaction
+}
+export {LookupAddress, WriteAddress};

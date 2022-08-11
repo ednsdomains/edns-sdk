@@ -1,3 +1,3 @@
-export {LookupAddress} from './address'
-export {LookUpText,TextType} from './text'
-export {LookupDomainFromAddress,SetReverseDomain} from './reverseDomain'
+export {LookupAddress,WriteAddress} from './address'
+export {LookUpText,TextType,WriteText} from './text'
+export {LookupDomainFromAddress,SetReverseDomain,Reclaim} from './reverseDomain'

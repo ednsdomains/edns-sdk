@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 export declare enum TextType {
     EMAIL = "email",
     URL = "url",
@@ -13,4 +14,5 @@ export declare enum TextType {
     DELEGATE = "delegate"
 }
 declare const LookUpText: (domain: string, type: TextType) => Promise<string | undefined>;
-export { LookUpText };
+declare const WriteText: (domain: string, type: TextType, text: string, signer: ethers.Signer) => Promise<ethers.ContractTransaction>;
+export { LookUpText, WriteText };
