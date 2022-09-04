@@ -38,7 +38,7 @@ const WriteAddress = (domain, coinName, address, signer) => __awaiter(void 0, vo
     const RESOLVER_CONTRACT_ADDRESS = '0x3c2DAab0AF88B0c5505ccB585e04FB33d7C80144';
     const Resolver = typechain_1.Resolver__factory.connect(RESOLVER_CONTRACT_ADDRESS, signer);
     const hash = (0, namehash_1.namehash)(domain);
-    const transaction = yield Resolver["setAddr(bytes32,uint256,bytes)"](hash, address_encoder_1.formatsByName[coinName].coinType, ethers_1.ethers.utils.toUtf8Bytes(address));
+    const transaction = yield Resolver["setAddr(bytes32,uint256,bytes)"](hash, address_encoder_1.formatsByName[coinName].coinType, (address));
     return transaction;
 });
 exports.WriteAddress = WriteAddress;

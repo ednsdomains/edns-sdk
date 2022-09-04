@@ -25,7 +25,7 @@ const WriteAddress = async (domain: string, coinName: string,address:string,sign
     const RESOLVER_CONTRACT_ADDRESS = '0x3c2DAab0AF88B0c5505ccB585e04FB33d7C80144';
     const Resolver = ResolverFactory.connect(RESOLVER_CONTRACT_ADDRESS, signer);
     const hash = namehash(domain);
-    const transaction = await Resolver["setAddr(bytes32,uint256,bytes)"](hash, formatsByName[coinName].coinType,ethers.utils.toUtf8Bytes(address));
+    const transaction = await Resolver["setAddr(bytes32,uint256,bytes)"](hash, formatsByName[coinName].coinType,(address));
     return transaction
 }
 export {LookupAddress, WriteAddress};

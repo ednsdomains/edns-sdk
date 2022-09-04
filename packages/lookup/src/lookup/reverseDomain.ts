@@ -64,6 +64,7 @@ const Reclaim  = async (domain: string,signer: ethers.Signer,tokenID:string): Pr
     const RegistrarController = EDNSRegistrarController__factory.connect("0x8C856f71d71e8CF4AD9A44cDC426b09e315c6A6a", signer);
     const tokenId = BigNumber.from(tokenID);
     const sender = await signer.getAddress()
+
     const basenode = await RegistrarController.tlds(ethers.utils.toUtf8Bytes(tld));
     const transaction = await Registrar.reclaim(tokenId,basenode,sender)
     return transaction
