@@ -11,6 +11,7 @@ import {
   PopulatedTransaction,
   BaseContract,
   ContractTransaction,
+  Overrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -18,10 +19,14 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface LabelValidatorInterface extends ethers.utils.Interface {
+interface MultiCoinAddressResolverInterface extends ethers.utils.Interface {
   functions: {
     "MAX_LABEL_LENGTH()": FunctionFragment;
     "MIN_LABEL_LENGTH()": FunctionFragment;
+    "getMultiCoinAddress(bytes,bytes,bytes,uint256)": FunctionFragment;
+    "setMultiCoinAddress(bytes,bytes,bytes,uint256,bytes)": FunctionFragment;
+    "setMultiCoinAddress_SYNC(bytes,bytes,bytes,uint256,bytes)": FunctionFragment;
+    "supportsInterface(bytes4)": FunctionFragment;
     "valid(string,string,string)": FunctionFragment;
   };
 
@@ -32,6 +37,22 @@ interface LabelValidatorInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "MIN_LABEL_LENGTH",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMultiCoinAddress",
+    values: [BytesLike, BytesLike, BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setMultiCoinAddress",
+    values: [BytesLike, BytesLike, BytesLike, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setMultiCoinAddress_SYNC",
+    values: [BytesLike, BytesLike, BytesLike, BigNumberish, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "valid",
@@ -46,12 +67,42 @@ interface LabelValidatorInterface extends ethers.utils.Interface {
     functionFragment: "MIN_LABEL_LENGTH",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMultiCoinAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMultiCoinAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMultiCoinAddress_SYNC",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "valid", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "SetMultiCoinAddress(bytes,bytes,bytes,uint256,bytes)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "SetMultiCoinAddress"): EventFragment;
 }
 
-export class LabelValidator extends BaseContract {
+export type SetMultiCoinAddressEvent = TypedEvent<
+  [string, string, string, BigNumber, string] & {
+    host: string;
+    name: string;
+    tld: string;
+    coin: BigNumber;
+    address_: string;
+  }
+>;
+
+export class MultiCoinAddressResolver extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -92,12 +143,43 @@ export class LabelValidator extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: LabelValidatorInterface;
+  interface: MultiCoinAddressResolverInterface;
 
   functions: {
     MAX_LABEL_LENGTH(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    setMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      address_: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setMultiCoinAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      address_: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    supportsInterface(
+      interfaceID: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     "valid(string,string,string)"(
       host: string,
@@ -107,13 +189,13 @@ export class LabelValidator extends BaseContract {
     ): Promise<[boolean]>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
@@ -130,6 +212,37 @@ export class LabelValidator extends BaseContract {
 
   MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getMultiCoinAddress(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    coin: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  setMultiCoinAddress(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    coin: BigNumberish,
+    address_: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setMultiCoinAddress_SYNC(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    coin: BigNumberish,
+    address_: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  supportsInterface(
+    interfaceID: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   "valid(string,string,string)"(
     host: string,
     arg1: string,
@@ -138,13 +251,13 @@ export class LabelValidator extends BaseContract {
   ): Promise<boolean>;
 
   "valid(string,string)"(
-    domain: string,
+    name: string,
     arg1: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   "valid(bytes,bytes)"(
-    domain: BytesLike,
+    name: BytesLike,
     arg1: BytesLike,
     overrides?: CallOverrides
   ): Promise<boolean>;
@@ -161,6 +274,37 @@ export class LabelValidator extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    setMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      address_: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setMultiCoinAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      address_: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    supportsInterface(
+      interfaceID: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     "valid(string,string,string)"(
       host: string,
       arg1: string,
@@ -169,13 +313,13 @@ export class LabelValidator extends BaseContract {
     ): Promise<boolean>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -188,12 +332,77 @@ export class LabelValidator extends BaseContract {
     ): Promise<boolean>;
   };
 
-  filters: {};
+  filters: {
+    "SetMultiCoinAddress(bytes,bytes,bytes,uint256,bytes)"(
+      host?: null,
+      name?: null,
+      tld?: null,
+      coin?: null,
+      address_?: null
+    ): TypedEventFilter<
+      [string, string, string, BigNumber, string],
+      {
+        host: string;
+        name: string;
+        tld: string;
+        coin: BigNumber;
+        address_: string;
+      }
+    >;
+
+    SetMultiCoinAddress(
+      host?: null,
+      name?: null,
+      tld?: null,
+      coin?: null,
+      address_?: null
+    ): TypedEventFilter<
+      [string, string, string, BigNumber, string],
+      {
+        host: string;
+        name: string;
+        tld: string;
+        coin: BigNumber;
+        address_: string;
+      }
+    >;
+  };
 
   estimateGas: {
     MAX_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    setMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      address_: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setMultiCoinAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      address_: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    supportsInterface(
+      interfaceID: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     "valid(string,string,string)"(
       host: string,
@@ -203,13 +412,13 @@ export class LabelValidator extends BaseContract {
     ): Promise<BigNumber>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -227,6 +436,37 @@ export class LabelValidator extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    getMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    setMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      address_: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setMultiCoinAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      coin: BigNumberish,
+      address_: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    supportsInterface(
+      interfaceID: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     "valid(string,string,string)"(
       host: string,
       arg1: string,
@@ -235,13 +475,13 @@ export class LabelValidator extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

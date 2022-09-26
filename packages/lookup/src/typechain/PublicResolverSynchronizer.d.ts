@@ -25,9 +25,7 @@ interface PublicResolverSynchronizerInterface extends ethers.utils.Interface {
     "ADMIN_ROLE()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "_reqExists(bytes32)": FunctionFragment;
-    "chainId()": FunctionFragment;
-    "chainIds(uint256)": FunctionFragment;
-    "estimateSyncFee(bytes)": FunctionFragment;
+    "estimateSyncFee(uint16[],bytes)": FunctionFragment;
     "failedMessages(uint16,bytes,uint64)": FunctionFragment;
     "forceResumeReceive(uint16,bytes)": FunctionFragment;
     "fulfill(bytes32,uint16)": FunctionFragment;
@@ -38,6 +36,7 @@ interface PublicResolverSynchronizerInterface extends ethers.utils.Interface {
     "hasRole(bytes32,address)": FunctionFragment;
     "initialize(address,uint16,uint16[])": FunctionFragment;
     "isTrustedRemote(uint16,bytes)": FunctionFragment;
+    "lzChainId()": FunctionFragment;
     "lzEndpoint()": FunctionFragment;
     "lzReceive(uint16,bytes,uint64,bytes)": FunctionFragment;
     "owner()": FunctionFragment;
@@ -50,7 +49,7 @@ interface PublicResolverSynchronizerInterface extends ethers.utils.Interface {
     "setSendVersion(uint16)": FunctionFragment;
     "setTrustedRemote(uint16,bytes)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
-    "sync(bytes)": FunctionFragment;
+    "sync(uint16[],bytes)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "trustedRemoteLookup(uint16)": FunctionFragment;
     "tryLzReceive(uint16,bytes,uint64,bytes)": FunctionFragment;
@@ -68,14 +67,9 @@ interface PublicResolverSynchronizerInterface extends ethers.utils.Interface {
     functionFragment: "_reqExists",
     values: [BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "chainId", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "chainIds",
-    values: [BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "estimateSyncFee",
-    values: [BytesLike]
+    values: [BigNumberish[], BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "failedMessages",
@@ -117,6 +111,7 @@ interface PublicResolverSynchronizerInterface extends ethers.utils.Interface {
     functionFragment: "isTrustedRemote",
     values: [BigNumberish, BytesLike]
   ): string;
+  encodeFunctionData(functionFragment: "lzChainId", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "lzEndpoint",
     values?: undefined
@@ -159,7 +154,10 @@ interface PublicResolverSynchronizerInterface extends ethers.utils.Interface {
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "sync", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "sync",
+    values: [BigNumberish[], BytesLike]
+  ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
@@ -179,8 +177,6 @@ interface PublicResolverSynchronizerInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "_reqExists", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "chainId", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "chainIds", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "estimateSyncFee",
     data: BytesLike
@@ -210,6 +206,7 @@ interface PublicResolverSynchronizerInterface extends ethers.utils.Interface {
     functionFragment: "isTrustedRemote",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "lzChainId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "lzEndpoint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "lzReceive", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -391,11 +388,8 @@ export class PublicResolverSynchronizer extends BaseContract {
 
     _reqExists(reqId: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
 
-    chainId(overrides?: CallOverrides): Promise<[number]>;
-
-    chainIds(arg0: BigNumberish, overrides?: CallOverrides): Promise<[number]>;
-
     estimateSyncFee(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
@@ -460,6 +454,8 @@ export class PublicResolverSynchronizer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    lzChainId(overrides?: CallOverrides): Promise<[number]>;
+
     lzEndpoint(overrides?: CallOverrides): Promise<[string]>;
 
     lzReceive(
@@ -523,6 +519,7 @@ export class PublicResolverSynchronizer extends BaseContract {
     ): Promise<[boolean]>;
 
     sync(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -552,11 +549,8 @@ export class PublicResolverSynchronizer extends BaseContract {
 
   _reqExists(reqId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
-  chainId(overrides?: CallOverrides): Promise<number>;
-
-  chainIds(arg0: BigNumberish, overrides?: CallOverrides): Promise<number>;
-
   estimateSyncFee(
+    lzChainIds: BigNumberish[],
     payload: BytesLike,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
@@ -621,6 +615,8 @@ export class PublicResolverSynchronizer extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  lzChainId(overrides?: CallOverrides): Promise<number>;
+
   lzEndpoint(overrides?: CallOverrides): Promise<string>;
 
   lzReceive(
@@ -684,6 +680,7 @@ export class PublicResolverSynchronizer extends BaseContract {
   ): Promise<boolean>;
 
   sync(
+    lzChainIds: BigNumberish[],
     payload: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -713,11 +710,8 @@ export class PublicResolverSynchronizer extends BaseContract {
 
     _reqExists(reqId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
-    chainId(overrides?: CallOverrides): Promise<number>;
-
-    chainIds(arg0: BigNumberish, overrides?: CallOverrides): Promise<number>;
-
     estimateSyncFee(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -782,6 +776,8 @@ export class PublicResolverSynchronizer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    lzChainId(overrides?: CallOverrides): Promise<number>;
+
     lzEndpoint(overrides?: CallOverrides): Promise<string>;
 
     lzReceive(
@@ -839,7 +835,11 @@ export class PublicResolverSynchronizer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    sync(payload: BytesLike, overrides?: CallOverrides): Promise<void>;
+    sync(
+      lzChainIds: BigNumberish[],
+      payload: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     transferOwnership(
       newOwner: string,
@@ -1049,11 +1049,8 @@ export class PublicResolverSynchronizer extends BaseContract {
 
     _reqExists(reqId: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-    chainId(overrides?: CallOverrides): Promise<BigNumber>;
-
-    chainIds(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
     estimateSyncFee(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1120,6 +1117,8 @@ export class PublicResolverSynchronizer extends BaseContract {
       _srcAddress: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    lzChainId(overrides?: CallOverrides): Promise<BigNumber>;
 
     lzEndpoint(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1184,6 +1183,7 @@ export class PublicResolverSynchronizer extends BaseContract {
     ): Promise<BigNumber>;
 
     sync(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -1219,14 +1219,8 @@ export class PublicResolverSynchronizer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    chainId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    chainIds(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     estimateSyncFee(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -1294,6 +1288,8 @@ export class PublicResolverSynchronizer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    lzChainId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     lzEndpoint(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     lzReceive(
@@ -1357,6 +1353,7 @@ export class PublicResolverSynchronizer extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     sync(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

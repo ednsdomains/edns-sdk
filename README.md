@@ -1,10 +1,18 @@
 # Edns-sdk
-[![gitbook](https://img.shields.io/badge/SDK-Document-blueviolet)](https://alex-wong-3.gitbook.io/edns-sdk/)
+[![gitbook](https://img.shields.io/badge/SDK-Document-blueviolet)](https://master-chit-chit.gitbook.io/edns-sdk-on-npm/)
 [![github](https://img.shields.io/badge/Git-Repo-inactive)](https://github.com/ednsdomains/Edns-sdk)
 
 All action that uses Write function/access requires the signer to be the domain holder.  
 
 # Record
+
+
+## NFT Record
+```typescript
+
+
+```
+
 ## Token Address Record
 A Getter and Setter function that allows domain owners to add wallet addresses to their domain name records.  Users can look up a domain name and find different wallet adresses to send relevant tokens to. 
 ### Lookup Address (Getter)
@@ -92,3 +100,5 @@ const domain = "ednsdomains2022.meta"
 const tokenID = "87038691297541742301397823287250866758499370580712584317467914794075493188134"
 const transaction = await Reclaim(domain,walletWithProvider,tokenID)
 ```
+
+

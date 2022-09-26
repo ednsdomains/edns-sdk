@@ -15,7 +15,26 @@ const _abi = [
         type: "bytes",
       },
     ],
-    name: "enable",
+    name: "getResolver",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "tld",
+        type: "bytes",
+      },
+    ],
+    name: "isEnable",
     outputs: [
       {
         internalType: "bool",
@@ -34,7 +53,7 @@ const _abi = [
         type: "bytes",
       },
     ],
-    name: "omni",
+    name: "isOmni",
     outputs: [
       {
         internalType: "bool",
@@ -80,29 +99,15 @@ const _abi = [
         name: "omni_",
         type: "bool",
       },
+      {
+        internalType: "uint16[]",
+        name: "lzChainIds",
+        type: "uint16[]",
+      },
     ],
     name: "register",
     outputs: [],
     stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "tld",
-        type: "bytes",
-      },
-    ],
-    name: "resolver",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
   },
   {

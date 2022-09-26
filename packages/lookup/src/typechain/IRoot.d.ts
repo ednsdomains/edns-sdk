@@ -22,25 +22,28 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface IRootInterface extends ethers.utils.Interface {
   functions: {
-    "enable(bytes)": FunctionFragment;
-    "omni(bytes)": FunctionFragment;
+    "getResolver(bytes)": FunctionFragment;
+    "isEnable(bytes)": FunctionFragment;
+    "isOmni(bytes)": FunctionFragment;
     "reclaim(bytes)": FunctionFragment;
-    "register(bytes,address,bool,bool)": FunctionFragment;
-    "resolver(bytes)": FunctionFragment;
+    "register(bytes,address,bool,bool,uint16[])": FunctionFragment;
     "setControllerApproval(bytes,address,bool)": FunctionFragment;
     "setEnable(bytes,bool)": FunctionFragment;
     "setResolver(bytes,address)": FunctionFragment;
     "transfer(bytes)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "enable", values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: "omni", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "getResolver",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(functionFragment: "isEnable", values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: "isOmni", values: [BytesLike]): string;
   encodeFunctionData(functionFragment: "reclaim", values: [BytesLike]): string;
   encodeFunctionData(
     functionFragment: "register",
-    values: [BytesLike, string, boolean, boolean]
+    values: [BytesLike, string, boolean, boolean, BigNumberish[]]
   ): string;
-  encodeFunctionData(functionFragment: "resolver", values: [BytesLike]): string;
   encodeFunctionData(
     functionFragment: "setControllerApproval",
     values: [BytesLike, string, boolean]
@@ -55,11 +58,14 @@ interface IRootInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "transfer", values: [BytesLike]): string;
 
-  decodeFunctionResult(functionFragment: "enable", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "omni", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getResolver",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "isEnable", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isOmni", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "reclaim", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "resolver", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setControllerApproval",
     data: BytesLike
@@ -118,9 +124,11 @@ export class IRoot extends BaseContract {
   interface: IRootInterface;
 
   functions: {
-    enable(tld: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+    getResolver(tld: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
-    omni(tld: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+    isEnable(tld: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+
+    isOmni(tld: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
 
     reclaim(
       tld: BytesLike,
@@ -132,10 +140,9 @@ export class IRoot extends BaseContract {
       resolver: string,
       enable_: boolean,
       omni_: boolean,
+      lzChainIds: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    resolver(tld: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
     setControllerApproval(
       tld: BytesLike,
@@ -162,9 +169,11 @@ export class IRoot extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  enable(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+  getResolver(tld: BytesLike, overrides?: CallOverrides): Promise<string>;
 
-  omni(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+  isEnable(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+  isOmni(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
   reclaim(
     tld: BytesLike,
@@ -176,10 +185,9 @@ export class IRoot extends BaseContract {
     resolver: string,
     enable_: boolean,
     omni_: boolean,
+    lzChainIds: BigNumberish[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  resolver(tld: BytesLike, overrides?: CallOverrides): Promise<string>;
 
   setControllerApproval(
     tld: BytesLike,
@@ -206,9 +214,11 @@ export class IRoot extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    enable(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+    getResolver(tld: BytesLike, overrides?: CallOverrides): Promise<string>;
 
-    omni(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+    isEnable(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+    isOmni(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
     reclaim(tld: BytesLike, overrides?: CallOverrides): Promise<void>;
 
@@ -217,10 +227,9 @@ export class IRoot extends BaseContract {
       resolver: string,
       enable_: boolean,
       omni_: boolean,
+      lzChainIds: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
-
-    resolver(tld: BytesLike, overrides?: CallOverrides): Promise<string>;
 
     setControllerApproval(
       tld: BytesLike,
@@ -247,9 +256,11 @@ export class IRoot extends BaseContract {
   filters: {};
 
   estimateGas: {
-    enable(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+    getResolver(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-    omni(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+    isEnable(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    isOmni(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     reclaim(
       tld: BytesLike,
@@ -261,10 +272,9 @@ export class IRoot extends BaseContract {
       resolver: string,
       enable_: boolean,
       omni_: boolean,
+      lzChainIds: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    resolver(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     setControllerApproval(
       tld: BytesLike,
@@ -292,12 +302,17 @@ export class IRoot extends BaseContract {
   };
 
   populateTransaction: {
-    enable(
+    getResolver(
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    omni(
+    isEnable(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isOmni(
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -312,12 +327,8 @@ export class IRoot extends BaseContract {
       resolver: string,
       enable_: boolean,
       omni_: boolean,
+      lzChainIds: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    resolver(
-      tld: BytesLike,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     setControllerApproval(

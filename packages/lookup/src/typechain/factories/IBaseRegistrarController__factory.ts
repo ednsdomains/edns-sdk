@@ -13,57 +13,14 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "domain",
-        type: "string",
+        internalType: "bytes",
+        name: "name",
+        type: "bytes",
       },
       {
-        internalType: "string",
+        internalType: "bytes",
         name: "tld",
-        type: "string",
-      },
-    ],
-    name: "available",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "tld",
-        type: "string",
-      },
-    ],
-    name: "available",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "domain",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "tld",
-        type: "string",
+        type: "bytes",
       },
       {
         internalType: "address",
@@ -71,105 +28,9 @@ const _abi = [
         type: "address",
       },
       {
-        internalType: "uint256",
-        name: "durations",
-        type: "uint256",
-      },
-    ],
-    name: "commit",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "domain",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "tld",
-        type: "string",
-      },
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "durations",
-        type: "uint256",
-      },
-    ],
-    name: "makeCommitment",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "domain",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "tld",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "durations",
-        type: "uint256",
-      },
-    ],
-    name: "price",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "domain",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "tld",
-        type: "string",
-      },
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "durations",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes32",
-        name: "commitment",
-        type: "bytes32",
+        internalType: "uint64",
+        name: "expires",
+        type: "uint64",
       },
     ],
     name: "register",
@@ -180,19 +41,19 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "domain",
-        type: "string",
+        internalType: "bytes",
+        name: "name",
+        type: "bytes",
       },
       {
-        internalType: "string",
+        internalType: "bytes",
         name: "tld",
-        type: "string",
+        type: "bytes",
       },
       {
-        internalType: "uint256",
-        name: "durations",
-        type: "uint256",
+        internalType: "uint64",
+        name: "expires",
+        type: "uint64",
       },
     ],
     name: "renew",

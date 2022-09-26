@@ -21,50 +21,104 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface IRegistryInterface extends ethers.utils.Interface {
   functions: {
-    "enable(bytes32)": FunctionFragment;
-    "exists(bytes32)": FunctionFragment;
-    "expiry(bytes32,bytes32)": FunctionFragment;
-    "gracePeriod()": FunctionFragment;
-    "live(bytes32,bytes32)": FunctionFragment;
-    "omni(bytes32)": FunctionFragment;
-    "operator(bytes32,bytes32,address)": FunctionFragment;
-    "owner(bytes32)": FunctionFragment;
-    "resolver(bytes32)": FunctionFragment;
+    "approve(address,uint256)": FunctionFragment;
+    "balanceOf(address)": FunctionFragment;
+    "getApproved(uint256)": FunctionFragment;
+    "getExpires(bytes32,bytes32)": FunctionFragment;
+    "getGracePeriod()": FunctionFragment;
+    "getOwner(bytes32,bytes32)": FunctionFragment;
+    "getResolver(bytes32,bytes32)": FunctionFragment;
+    "getTldType(bytes32)": FunctionFragment;
+    "isApprovedForAll(address,address)": FunctionFragment;
+    "isEnable(bytes32)": FunctionFragment;
+    "isExists(bytes32,bytes32)": FunctionFragment;
+    "isLive(bytes32,bytes32)": FunctionFragment;
+    "isOperator(bytes32,bytes32)": FunctionFragment;
+    "ownerOf(uint256)": FunctionFragment;
+    "remove(bytes32,bytes32)": FunctionFragment;
+    "safeTransferFrom(address,address,uint256)": FunctionFragment;
+    "setApprovalForAll(address,bool)": FunctionFragment;
     "setEnable(bytes32,bool)": FunctionFragment;
-    "setExpiry(bytes32,bytes32,uint256)": FunctionFragment;
+    "setExpires(bytes32,bytes32,uint64)": FunctionFragment;
     "setOperator(bytes32,bytes32,address,bool)": FunctionFragment;
     "setOwner(bytes32,bytes32,address)": FunctionFragment;
-    "setRecord(bytes,address,address,bool,bool)": FunctionFragment;
+    "setRecord(bytes,bytes,bytes)": FunctionFragment;
     "setResolver(bytes32,address)": FunctionFragment;
+    "setUser(uint256,address,uint64)": FunctionFragment;
+    "supportsInterface(bytes4)": FunctionFragment;
+    "transferFrom(address,address,uint256)": FunctionFragment;
+    "userExpires(uint256)": FunctionFragment;
+    "userOf(uint256)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "enable", values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: "exists", values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "expiry",
+    functionFragment: "approve",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "getApproved",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getExpires",
     values: [BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "gracePeriod",
+    functionFragment: "getGracePeriod",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "live",
+    functionFragment: "getOwner",
     values: [BytesLike, BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "omni", values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "operator",
-    values: [BytesLike, BytesLike, string]
+    functionFragment: "getResolver",
+    values: [BytesLike, BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "owner", values: [BytesLike]): string;
-  encodeFunctionData(functionFragment: "resolver", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "getTldType",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isApprovedForAll",
+    values: [string, string]
+  ): string;
+  encodeFunctionData(functionFragment: "isEnable", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "isExists",
+    values: [BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isLive",
+    values: [BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "isOperator",
+    values: [BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "ownerOf",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "remove",
+    values: [BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "safeTransferFrom",
+    values: [string, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setApprovalForAll",
+    values: [string, boolean]
+  ): string;
   encodeFunctionData(
     functionFragment: "setEnable",
     values: [BytesLike, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "setExpiry",
+    functionFragment: "setExpires",
     values: [BytesLike, BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -77,27 +131,70 @@ interface IRegistryInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setRecord",
-    values: [BytesLike, string, string, boolean, boolean]
+    values: [BytesLike, BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "setResolver",
     values: [BytesLike, string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setUser",
+    values: [BigNumberish, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferFrom",
+    values: [string, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "userExpires",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "userOf",
+    values: [BigNumberish]
+  ): string;
 
-  decodeFunctionResult(functionFragment: "enable", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "exists", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "expiry", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "gracePeriod",
+    functionFragment: "getApproved",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "live", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "omni", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "operator", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "resolver", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getExpires", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getGracePeriod",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getOwner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getResolver",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getTldType", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "isApprovedForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "isEnable", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isExists", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isLive", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isOperator", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "remove", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "safeTransferFrom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setApprovalForAll",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "setEnable", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setExpiry", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setExpires", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setOperator",
     data: BytesLike
@@ -108,30 +205,68 @@ interface IRegistryInterface extends ethers.utils.Interface {
     functionFragment: "setResolver",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setUser", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferFrom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "userExpires",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "userOf", data: BytesLike): Result;
 
   events: {
+    "Approval(address,address,uint256)": EventFragment;
+    "ApprovalForAll(address,address,bool)": EventFragment;
     "NewDomain(bytes,bytes,address)": EventFragment;
     "NewHost(bytes,bytes,bytes)": EventFragment;
     "NewOwner(bytes,address)": EventFragment;
     "NewResolver(bytes,address)": EventFragment;
     "NewTld(bytes,address)": EventFragment;
     "SetOperator(bytes,address,bool)": EventFragment;
+    "Transfer(address,address,uint256)": EventFragment;
+    "UpdateUser(uint256,address,uint64)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewDomain"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewHost"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewOwner"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewResolver"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewTld"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetOperator"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "UpdateUser"): EventFragment;
 }
 
+export type ApprovalEvent = TypedEvent<
+  [string, string, BigNumber] & {
+    owner: string;
+    approved: string;
+    tokenId: BigNumber;
+  }
+>;
+
+export type ApprovalForAllEvent = TypedEvent<
+  [string, string, boolean] & {
+    owner: string;
+    operator: string;
+    approved: boolean;
+  }
+>;
+
 export type NewDomainEvent = TypedEvent<
-  [string, string, string] & { domain: string; tld: string; owner: string }
+  [string, string, string] & { name: string; tld: string; owner: string }
 >;
 
 export type NewHostEvent = TypedEvent<
-  [string, string, string] & { host: string; domain: string; tld: string }
+  [string, string, string] & { host: string; name: string; tld: string }
 >;
 
 export type NewOwnerEvent = TypedEvent<
@@ -151,6 +286,18 @@ export type SetOperatorEvent = TypedEvent<
     fqdn: string;
     operator: string;
     approved: boolean;
+  }
+>;
+
+export type TransferEvent = TypedEvent<
+  [string, string, BigNumber] & { from: string; to: string; tokenId: BigNumber }
+>;
+
+export type UpdateUserEvent = TypedEvent<
+  [BigNumber, string, BigNumber] & {
+    tokenId: BigNumber;
+    user: string;
+    expires: BigNumber;
   }
 >;
 
@@ -198,91 +345,152 @@ export class IRegistry extends BaseContract {
   interface: IRegistryInterface;
 
   functions: {
-    enable(tld: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+    approve(
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    "exists(bytes32)"(
-      tld: BytesLike,
+    balanceOf(
+      owner: string,
       overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    ): Promise<[BigNumber] & { balance: BigNumber }>;
 
-    "exists(bytes32,bytes32,bytes32)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
+    getApproved(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    ): Promise<[string] & { operator: string }>;
 
-    "exists(bytes32,bytes32)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    expiry(
-      domain: BytesLike,
+    getExpires(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    gracePeriod(overrides?: CallOverrides): Promise<[BigNumber]>;
+    getGracePeriod(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    live(
-      domain: BytesLike,
+    "getOwner(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "getOwner(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "getResolver(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "getResolver(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getTldType(tld: BytesLike, overrides?: CallOverrides): Promise<[number]>;
+
+    isApprovedForAll(
+      owner: string,
+      operator: string,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    isEnable(tld: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+
+    "isExists(bytes32,bytes32)"(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    omni(tld: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+    "isExists(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
-    "operator(bytes32,bytes32,address)"(
-      domain: BytesLike,
+    "isExists(bytes32,bytes32,bytes32)"(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    isLive(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    "isOperator(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    "isOperator(bytes32,bytes32,bytes32)"(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    "isOperator(bytes32,bytes32,bytes32,address)"(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       _operator: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    "operator(bytes32,bytes32)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    "operator(bytes32,bytes32,bytes32)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    "operator(bytes32,bytes32,bytes32,address)"(
-      host: BytesLike,
-      domain: BytesLike,
+    "isOperator(bytes32,bytes32,address)"(
+      name: BytesLike,
       tld: BytesLike,
       _operator: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    "owner(bytes32)"(
-      tld: BytesLike,
+    ownerOf(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string]>;
+    ): Promise<[string] & { owner: string }>;
 
-    "owner(bytes32,bytes32)"(
-      domain: BytesLike,
+    "remove(bytes32,bytes32)"(
+      name: BytesLike,
       tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    "resolver(bytes32)"(
+    "remove(bytes32,bytes32,bytes32)"(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    "resolver(bytes32,bytes32)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setApprovalForAll(
+      operator: string,
+      _approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     setEnable(
       tld: BytesLike,
@@ -290,15 +498,15 @@ export class IRegistry extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setExpiry(
-      domain: BytesLike,
+    setExpires(
+      name: BytesLike,
       tld: BytesLike,
-      expiry: BigNumberish,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "setOperator(bytes32,bytes32,address,bool)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       operator: string,
       approved: boolean,
@@ -307,7 +515,7 @@ export class IRegistry extends BaseContract {
 
     "setOperator(bytes32,bytes32,bytes32,address,bool)"(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       operator: string,
       approved: boolean,
@@ -315,7 +523,7 @@ export class IRegistry extends BaseContract {
     ): Promise<ContractTransaction>;
 
     "setOwner(bytes32,bytes32,address)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -327,28 +535,28 @@ export class IRegistry extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "setRecord(bytes,address,address,bool,bool)"(
+    "setRecord(bytes,bytes,bytes)"(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setRecord(bytes,bytes,address,address,uint64)"(
+      name: BytesLike,
+      tld: BytesLike,
+      owner: string,
+      resolver: string,
+      expires: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setRecord(bytes,address,address,bool,uint8)"(
       tld: BytesLike,
       owner: string,
       resolver: string,
       enable: boolean,
-      omni: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    "setRecord(bytes,bytes,address,address,uint256)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      owner: string,
-      resolver: string,
-      expiry: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    "setRecord(bytes,bytes,bytes)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
+      type_: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -359,95 +567,179 @@ export class IRegistry extends BaseContract {
     ): Promise<ContractTransaction>;
 
     "setResolver(bytes32,bytes32,address)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       resolver: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    setUser(
+      tokenId: BigNumberish,
+      user: string,
+      expires: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    transferFrom(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    userExpires(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    userOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
   };
 
-  enable(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+  approve(
+    to: string,
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  "exists(bytes32)"(
-    tld: BytesLike,
+  balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+  getApproved(
+    tokenId: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<boolean>;
+  ): Promise<string>;
 
-  "exists(bytes32,bytes32,bytes32)"(
-    host: BytesLike,
-    domain: BytesLike,
-    tld: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  "exists(bytes32,bytes32)"(
-    domain: BytesLike,
-    tld: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  expiry(
-    domain: BytesLike,
+  getExpires(
+    name: BytesLike,
     tld: BytesLike,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  gracePeriod(overrides?: CallOverrides): Promise<BigNumber>;
+  getGracePeriod(overrides?: CallOverrides): Promise<BigNumber>;
 
-  live(
-    domain: BytesLike,
+  "getOwner(bytes32,bytes32)"(
+    name: BytesLike,
+    tld: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "getOwner(bytes32)"(
+    tld: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "getResolver(bytes32,bytes32)"(
+    name: BytesLike,
+    tld: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "getResolver(bytes32)"(
+    tld: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getTldType(tld: BytesLike, overrides?: CallOverrides): Promise<number>;
+
+  isApprovedForAll(
+    owner: string,
+    operator: string,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  isEnable(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+  "isExists(bytes32,bytes32)"(
+    name: BytesLike,
     tld: BytesLike,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  omni(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+  "isExists(bytes32)"(
+    tld: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
-  "operator(bytes32,bytes32,address)"(
-    domain: BytesLike,
+  "isExists(bytes32,bytes32,bytes32)"(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  isLive(
+    name: BytesLike,
+    tld: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  "isOperator(bytes32,bytes32)"(
+    name: BytesLike,
+    tld: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  "isOperator(bytes32,bytes32,bytes32)"(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  "isOperator(bytes32,bytes32,bytes32,address)"(
+    host: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
     _operator: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  "operator(bytes32,bytes32)"(
-    domain: BytesLike,
-    tld: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  "operator(bytes32,bytes32,bytes32)"(
-    host: BytesLike,
-    domain: BytesLike,
-    tld: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  "operator(bytes32,bytes32,bytes32,address)"(
-    host: BytesLike,
-    domain: BytesLike,
+  "isOperator(bytes32,bytes32,address)"(
+    name: BytesLike,
     tld: BytesLike,
     _operator: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  "owner(bytes32)"(tld: BytesLike, overrides?: CallOverrides): Promise<string>;
+  ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-  "owner(bytes32,bytes32)"(
-    domain: BytesLike,
+  "remove(bytes32,bytes32)"(
+    name: BytesLike,
     tld: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<string>;
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  "resolver(bytes32)"(
+  "remove(bytes32,bytes32,bytes32)"(
+    host: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<string>;
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  "resolver(bytes32,bytes32)"(
-    domain: BytesLike,
-    tld: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<string>;
+  "safeTransferFrom(address,address,uint256)"(
+    from: string,
+    to: string,
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "safeTransferFrom(address,address,uint256,bytes)"(
+    from: string,
+    to: string,
+    tokenId: BigNumberish,
+    data: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setApprovalForAll(
+    operator: string,
+    _approved: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   setEnable(
     tld: BytesLike,
@@ -455,15 +747,15 @@ export class IRegistry extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setExpiry(
-    domain: BytesLike,
+  setExpires(
+    name: BytesLike,
     tld: BytesLike,
-    expiry: BigNumberish,
+    expires: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "setOperator(bytes32,bytes32,address,bool)"(
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
     operator: string,
     approved: boolean,
@@ -472,7 +764,7 @@ export class IRegistry extends BaseContract {
 
   "setOperator(bytes32,bytes32,bytes32,address,bool)"(
     host: BytesLike,
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
     operator: string,
     approved: boolean,
@@ -480,7 +772,7 @@ export class IRegistry extends BaseContract {
   ): Promise<ContractTransaction>;
 
   "setOwner(bytes32,bytes32,address)"(
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
     owner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -492,28 +784,28 @@ export class IRegistry extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "setRecord(bytes,address,address,bool,bool)"(
+  "setRecord(bytes,bytes,bytes)"(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setRecord(bytes,bytes,address,address,uint64)"(
+    name: BytesLike,
+    tld: BytesLike,
+    owner: string,
+    resolver: string,
+    expires: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setRecord(bytes,address,address,bool,uint8)"(
     tld: BytesLike,
     owner: string,
     resolver: string,
     enable: boolean,
-    omni: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  "setRecord(bytes,bytes,address,address,uint256)"(
-    domain: BytesLike,
-    tld: BytesLike,
-    owner: string,
-    resolver: string,
-    expiry: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  "setRecord(bytes,bytes,bytes)"(
-    host: BytesLike,
-    domain: BytesLike,
-    tld: BytesLike,
+    type_: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -524,98 +816,179 @@ export class IRegistry extends BaseContract {
   ): Promise<ContractTransaction>;
 
   "setResolver(bytes32,bytes32,address)"(
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
     resolver: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setUser(
+    tokenId: BigNumberish,
+    user: string,
+    expires: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  supportsInterface(
+    interfaceId: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  transferFrom(
+    from: string,
+    to: string,
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  userExpires(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  userOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
   callStatic: {
-    enable(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
-
-    "exists(bytes32)"(
-      tld: BytesLike,
+    approve(
+      to: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<void>;
 
-    "exists(bytes32,bytes32,bytes32)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    getApproved(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<string>;
 
-    "exists(bytes32,bytes32)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    expiry(
-      domain: BytesLike,
+    getExpires(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    gracePeriod(overrides?: CallOverrides): Promise<BigNumber>;
+    getGracePeriod(overrides?: CallOverrides): Promise<BigNumber>;
 
-    live(
-      domain: BytesLike,
+    "getOwner(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "getOwner(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "getResolver(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "getResolver(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getTldType(tld: BytesLike, overrides?: CallOverrides): Promise<number>;
+
+    isApprovedForAll(
+      owner: string,
+      operator: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    isEnable(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+    "isExists(bytes32,bytes32)"(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    omni(tld: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+    "isExists(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
-    "operator(bytes32,bytes32,address)"(
-      domain: BytesLike,
+    "isExists(bytes32,bytes32,bytes32)"(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    isLive(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "isOperator(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "isOperator(bytes32,bytes32,bytes32)"(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "isOperator(bytes32,bytes32,bytes32,address)"(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       _operator: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "operator(bytes32,bytes32)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "operator(bytes32,bytes32,bytes32)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "operator(bytes32,bytes32,bytes32,address)"(
-      host: BytesLike,
-      domain: BytesLike,
+    "isOperator(bytes32,bytes32,address)"(
+      name: BytesLike,
       tld: BytesLike,
       _operator: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "owner(bytes32)"(
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<string>;
+    ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    "owner(bytes32,bytes32)"(
-      domain: BytesLike,
+    "remove(bytes32,bytes32)"(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
-    ): Promise<string>;
+    ): Promise<void>;
 
-    "resolver(bytes32)"(
+    "remove(bytes32,bytes32,bytes32)"(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
-    ): Promise<string>;
+    ): Promise<void>;
 
-    "resolver(bytes32,bytes32)"(
-      domain: BytesLike,
-      tld: BytesLike,
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<string>;
+    ): Promise<void>;
+
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      data: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setApprovalForAll(
+      operator: string,
+      _approved: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setEnable(
       tld: BytesLike,
@@ -623,15 +996,15 @@ export class IRegistry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setExpiry(
-      domain: BytesLike,
+    setExpires(
+      name: BytesLike,
       tld: BytesLike,
-      expiry: BigNumberish,
+      expires: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     "setOperator(bytes32,bytes32,address,bool)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       operator: string,
       approved: boolean,
@@ -640,7 +1013,7 @@ export class IRegistry extends BaseContract {
 
     "setOperator(bytes32,bytes32,bytes32,address,bool)"(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       operator: string,
       approved: boolean,
@@ -648,7 +1021,7 @@ export class IRegistry extends BaseContract {
     ): Promise<void>;
 
     "setOwner(bytes32,bytes32,address)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       owner: string,
       overrides?: CallOverrides
@@ -660,28 +1033,28 @@ export class IRegistry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "setRecord(bytes,address,address,bool,bool)"(
+    "setRecord(bytes,bytes,bytes)"(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setRecord(bytes,bytes,address,address,uint64)"(
+      name: BytesLike,
+      tld: BytesLike,
+      owner: string,
+      resolver: string,
+      expires: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setRecord(bytes,address,address,bool,uint8)"(
       tld: BytesLike,
       owner: string,
       resolver: string,
       enable: boolean,
-      omni: boolean,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "setRecord(bytes,bytes,address,address,uint256)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      owner: string,
-      resolver: string,
-      expiry: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "setRecord(bytes,bytes,bytes)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
+      type_: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -692,48 +1065,110 @@ export class IRegistry extends BaseContract {
     ): Promise<void>;
 
     "setResolver(bytes32,bytes32,address)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       resolver: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setUser(
+      tokenId: BigNumberish,
+      user: string,
+      expires: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    transferFrom(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    userExpires(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    userOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
+    "Approval(address,address,uint256)"(
+      owner?: string | null,
+      approved?: string | null,
+      tokenId?: BigNumberish | null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { owner: string; approved: string; tokenId: BigNumber }
+    >;
+
+    Approval(
+      owner?: string | null,
+      approved?: string | null,
+      tokenId?: BigNumberish | null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { owner: string; approved: string; tokenId: BigNumber }
+    >;
+
+    "ApprovalForAll(address,address,bool)"(
+      owner?: string | null,
+      operator?: string | null,
+      approved?: null
+    ): TypedEventFilter<
+      [string, string, boolean],
+      { owner: string; operator: string; approved: boolean }
+    >;
+
+    ApprovalForAll(
+      owner?: string | null,
+      operator?: string | null,
+      approved?: null
+    ): TypedEventFilter<
+      [string, string, boolean],
+      { owner: string; operator: string; approved: boolean }
+    >;
+
     "NewDomain(bytes,bytes,address)"(
-      domain?: null,
+      name?: null,
       tld?: null,
       owner?: null
     ): TypedEventFilter<
       [string, string, string],
-      { domain: string; tld: string; owner: string }
+      { name: string; tld: string; owner: string }
     >;
 
     NewDomain(
-      domain?: null,
+      name?: null,
       tld?: null,
       owner?: null
     ): TypedEventFilter<
       [string, string, string],
-      { domain: string; tld: string; owner: string }
+      { name: string; tld: string; owner: string }
     >;
 
     "NewHost(bytes,bytes,bytes)"(
       host?: null,
-      domain?: null,
+      name?: null,
       tld?: null
     ): TypedEventFilter<
       [string, string, string],
-      { host: string; domain: string; tld: string }
+      { host: string; name: string; tld: string }
     >;
 
     NewHost(
       host?: null,
-      domain?: null,
+      name?: null,
       tld?: null
     ): TypedEventFilter<
       [string, string, string],
-      { host: string; domain: string; tld: string }
+      { host: string; name: string; tld: string }
     >;
 
     "NewOwner(bytes,address)"(
@@ -789,93 +1224,187 @@ export class IRegistry extends BaseContract {
       [string, string, boolean],
       { fqdn: string; operator: string; approved: boolean }
     >;
+
+    "Transfer(address,address,uint256)"(
+      from?: string | null,
+      to?: string | null,
+      tokenId?: BigNumberish | null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { from: string; to: string; tokenId: BigNumber }
+    >;
+
+    Transfer(
+      from?: string | null,
+      to?: string | null,
+      tokenId?: BigNumberish | null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { from: string; to: string; tokenId: BigNumber }
+    >;
+
+    "UpdateUser(uint256,address,uint64)"(
+      tokenId?: BigNumberish | null,
+      user?: string | null,
+      expires?: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber],
+      { tokenId: BigNumber; user: string; expires: BigNumber }
+    >;
+
+    UpdateUser(
+      tokenId?: BigNumberish | null,
+      user?: string | null,
+      expires?: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber],
+      { tokenId: BigNumber; user: string; expires: BigNumber }
+    >;
   };
 
   estimateGas: {
-    enable(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+    approve(
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
-    "exists(bytes32)"(
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    getApproved(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getExpires(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "exists(bytes32,bytes32,bytes32)"(
+    getGracePeriod(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "getOwner(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getOwner(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getResolver(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getResolver(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTldType(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    isApprovedForAll(
+      owner: string,
+      operator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    isEnable(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "isExists(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "isExists(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "isExists(bytes32,bytes32,bytes32)"(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "exists(bytes32,bytes32)"(
-      domain: BytesLike,
+    isLive(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    expiry(
-      domain: BytesLike,
+    "isOperator(bytes32,bytes32)"(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    gracePeriod(overrides?: CallOverrides): Promise<BigNumber>;
-
-    live(
-      domain: BytesLike,
+    "isOperator(bytes32,bytes32,bytes32)"(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    omni(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
-
-    "operator(bytes32,bytes32,address)"(
-      domain: BytesLike,
+    "isOperator(bytes32,bytes32,bytes32,address)"(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       _operator: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "operator(bytes32,bytes32)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "operator(bytes32,bytes32,bytes32)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "operator(bytes32,bytes32,bytes32,address)"(
-      host: BytesLike,
-      domain: BytesLike,
+    "isOperator(bytes32,bytes32,address)"(
+      name: BytesLike,
       tld: BytesLike,
       _operator: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "owner(bytes32)"(
-      tld: BytesLike,
+    ownerOf(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "owner(bytes32,bytes32)"(
-      domain: BytesLike,
+    "remove(bytes32,bytes32)"(
+      name: BytesLike,
       tld: BytesLike,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "resolver(bytes32)"(
+    "remove(bytes32,bytes32,bytes32)"(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "resolver(bytes32,bytes32)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setApprovalForAll(
+      operator: string,
+      _approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setEnable(
@@ -884,15 +1413,15 @@ export class IRegistry extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setExpiry(
-      domain: BytesLike,
+    setExpires(
+      name: BytesLike,
       tld: BytesLike,
-      expiry: BigNumberish,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "setOperator(bytes32,bytes32,address,bool)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       operator: string,
       approved: boolean,
@@ -901,7 +1430,7 @@ export class IRegistry extends BaseContract {
 
     "setOperator(bytes32,bytes32,bytes32,address,bool)"(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       operator: string,
       approved: boolean,
@@ -909,7 +1438,7 @@ export class IRegistry extends BaseContract {
     ): Promise<BigNumber>;
 
     "setOwner(bytes32,bytes32,address)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -921,28 +1450,28 @@ export class IRegistry extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "setRecord(bytes,address,address,bool,bool)"(
+    "setRecord(bytes,bytes,bytes)"(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setRecord(bytes,bytes,address,address,uint64)"(
+      name: BytesLike,
+      tld: BytesLike,
+      owner: string,
+      resolver: string,
+      expires: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setRecord(bytes,address,address,bool,uint8)"(
       tld: BytesLike,
       owner: string,
       resolver: string,
       enable: boolean,
-      omni: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    "setRecord(bytes,bytes,address,address,uint256)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      owner: string,
-      resolver: string,
-      expiry: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    "setRecord(bytes,bytes,bytes)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
+      type_: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -953,104 +1482,194 @@ export class IRegistry extends BaseContract {
     ): Promise<BigNumber>;
 
     "setResolver(bytes32,bytes32,address)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       resolver: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setUser(
+      tokenId: BigNumberish,
+      user: string,
+      expires: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    transferFrom(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    userExpires(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    userOf(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    enable(
+    approve(
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    balanceOf(
+      owner: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getApproved(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getExpires(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "exists(bytes32)"(
+    getGracePeriod(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "getOwner(bytes32,bytes32)"(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "exists(bytes32,bytes32,bytes32)"(
+    "getOwner(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getResolver(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getResolver(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTldType(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isApprovedForAll(
+      owner: string,
+      operator: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isEnable(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "isExists(bytes32,bytes32)"(
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "isExists(bytes32)"(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "isExists(bytes32,bytes32,bytes32)"(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "exists(bytes32,bytes32)"(
-      domain: BytesLike,
+    isLive(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    expiry(
-      domain: BytesLike,
+    "isOperator(bytes32,bytes32)"(
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    gracePeriod(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    live(
-      domain: BytesLike,
+    "isOperator(bytes32,bytes32,bytes32)"(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    omni(
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "operator(bytes32,bytes32,address)"(
-      domain: BytesLike,
+    "isOperator(bytes32,bytes32,bytes32,address)"(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       _operator: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "operator(bytes32,bytes32)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "operator(bytes32,bytes32,bytes32)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "operator(bytes32,bytes32,bytes32,address)"(
-      host: BytesLike,
-      domain: BytesLike,
+    "isOperator(bytes32,bytes32,address)"(
+      name: BytesLike,
       tld: BytesLike,
       _operator: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "owner(bytes32)"(
-      tld: BytesLike,
+    ownerOf(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "owner(bytes32,bytes32)"(
-      domain: BytesLike,
+    "remove(bytes32,bytes32)"(
+      name: BytesLike,
       tld: BytesLike,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "resolver(bytes32)"(
+    "remove(bytes32,bytes32,bytes32)"(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "resolver(bytes32,bytes32)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      overrides?: CallOverrides
+    "safeTransferFrom(address,address,uint256)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "safeTransferFrom(address,address,uint256,bytes)"(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setApprovalForAll(
+      operator: string,
+      _approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setEnable(
@@ -1059,15 +1678,15 @@ export class IRegistry extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setExpiry(
-      domain: BytesLike,
+    setExpires(
+      name: BytesLike,
       tld: BytesLike,
-      expiry: BigNumberish,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "setOperator(bytes32,bytes32,address,bool)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       operator: string,
       approved: boolean,
@@ -1076,7 +1695,7 @@ export class IRegistry extends BaseContract {
 
     "setOperator(bytes32,bytes32,bytes32,address,bool)"(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       operator: string,
       approved: boolean,
@@ -1084,7 +1703,7 @@ export class IRegistry extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     "setOwner(bytes32,bytes32,address)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1096,28 +1715,28 @@ export class IRegistry extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "setRecord(bytes,address,address,bool,bool)"(
+    "setRecord(bytes,bytes,bytes)"(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setRecord(bytes,bytes,address,address,uint64)"(
+      name: BytesLike,
+      tld: BytesLike,
+      owner: string,
+      resolver: string,
+      expires: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setRecord(bytes,address,address,bool,uint8)"(
       tld: BytesLike,
       owner: string,
       resolver: string,
       enable: boolean,
-      omni: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "setRecord(bytes,bytes,address,address,uint256)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      owner: string,
-      resolver: string,
-      expiry: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "setRecord(bytes,bytes,bytes)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
+      type_: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1128,10 +1747,39 @@ export class IRegistry extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     "setResolver(bytes32,bytes32,address)"(
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       resolver: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setUser(
+      tokenId: BigNumberish,
+      user: string,
+      expires: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    transferFrom(
+      from: string,
+      to: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    userExpires(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    userOf(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

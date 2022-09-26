@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
 import type {
-  ReverseResolver,
-  ReverseResolverInterface,
-} from "../ReverseResolver";
+  MultiCoinAddressResolver,
+  MultiCoinAddressResolverInterface,
+} from "../MultiCoinAddressResolver";
 
 const _abi = [
   {
@@ -22,7 +22,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -33,12 +33,18 @@ const _abi = [
       },
       {
         indexed: false,
+        internalType: "uint256",
+        name: "coin",
+        type: "uint256",
+      },
+      {
+        indexed: false,
         internalType: "bytes",
         name: "address_",
         type: "bytes",
       },
     ],
-    name: "SetReverseRecord",
+    name: "SetMultiCoinAddress",
     type: "event",
   },
   {
@@ -76,7 +82,7 @@ const _abi = [
       },
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -85,25 +91,12 @@ const _abi = [
         type: "bytes",
       },
       {
-        internalType: "bytes",
-        name: "address_",
-        type: "bytes",
+        internalType: "uint256",
+        name: "coin",
+        type: "uint256",
       },
     ],
-    name: "_setReverseRecord",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "address_",
-        type: "bytes",
-      },
-    ],
-    name: "reverse",
+    name: "getMultiCoinAddress",
     outputs: [
       {
         internalType: "bytes",
@@ -123,7 +116,7 @@ const _abi = [
       },
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -132,12 +125,17 @@ const _abi = [
         type: "bytes",
       },
       {
+        internalType: "uint256",
+        name: "coin",
+        type: "uint256",
+      },
+      {
         internalType: "bytes",
         name: "address_",
         type: "bytes",
       },
     ],
-    name: "setReverseRecord",
+    name: "setMultiCoinAddress",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -151,7 +149,7 @@ const _abi = [
       },
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -160,12 +158,17 @@ const _abi = [
         type: "bytes",
       },
       {
+        internalType: "uint256",
+        name: "coin",
+        type: "uint256",
+      },
+      {
         internalType: "bytes",
         name: "address_",
         type: "bytes",
       },
     ],
-    name: "setReverseRecord_SYNC",
+    name: "setMultiCoinAddress_SYNC",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -222,7 +225,7 @@ const _abi = [
     inputs: [
       {
         internalType: "string",
-        name: "domain",
+        name: "name",
         type: "string",
       },
       {
@@ -246,7 +249,7 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -297,15 +300,19 @@ const _abi = [
   },
 ];
 
-export class ReverseResolver__factory {
+export class MultiCoinAddressResolver__factory {
   static readonly abi = _abi;
-  static createInterface(): ReverseResolverInterface {
-    return new utils.Interface(_abi) as ReverseResolverInterface;
+  static createInterface(): MultiCoinAddressResolverInterface {
+    return new utils.Interface(_abi) as MultiCoinAddressResolverInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ReverseResolver {
-    return new Contract(address, _abi, signerOrProvider) as ReverseResolver;
+  ): MultiCoinAddressResolver {
+    return new Contract(
+      address,
+      _abi,
+      signerOrProvider
+    ) as MultiCoinAddressResolver;
   }
 }

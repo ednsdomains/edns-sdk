@@ -22,15 +22,18 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface ISynchronizerInterface extends ethers.utils.Interface {
   functions: {
-    "estimateSyncFee(bytes)": FunctionFragment;
-    "sync(bytes)": FunctionFragment;
+    "estimateSyncFee(uint16[],bytes)": FunctionFragment;
+    "sync(uint16[],bytes)": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "estimateSyncFee",
-    values: [BytesLike]
+    values: [BigNumberish[], BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "sync", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "sync",
+    values: [BigNumberish[], BytesLike]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "estimateSyncFee",
@@ -86,44 +89,55 @@ export class ISynchronizer extends BaseContract {
 
   functions: {
     estimateSyncFee(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     sync(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
   estimateSyncFee(
+    lzChainIds: BigNumberish[],
     payload: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   sync(
+    lzChainIds: BigNumberish[],
     payload: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
     estimateSyncFee(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    sync(payload: BytesLike, overrides?: CallOverrides): Promise<void>;
+    sync(
+      lzChainIds: BigNumberish[],
+      payload: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {};
 
   estimateGas: {
     estimateSyncFee(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     sync(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -131,11 +145,13 @@ export class ISynchronizer extends BaseContract {
 
   populateTransaction: {
     estimateSyncFee(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     sync(
+      lzChainIds: BigNumberish[],
       payload: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

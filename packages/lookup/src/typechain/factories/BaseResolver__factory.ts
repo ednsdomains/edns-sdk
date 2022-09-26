@@ -85,7 +85,7 @@ const _abi = [
     inputs: [
       {
         internalType: "string",
-        name: "domain",
+        name: "name",
         type: "string",
       },
       {
@@ -109,7 +109,7 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {

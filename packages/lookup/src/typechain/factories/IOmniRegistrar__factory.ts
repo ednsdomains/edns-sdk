@@ -14,59 +14,9 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "approved",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "Approval",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "approved",
-        type: "bool",
-      },
-    ],
-    name: "ApprovalForAll",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: false,
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -91,7 +41,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -109,7 +59,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "expiry",
+        name: "expires",
         type: "uint256",
       },
     ],
@@ -122,7 +72,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -134,7 +84,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
-        name: "expiry",
+        name: "expires",
         type: "uint256",
       },
     ],
@@ -167,57 +117,43 @@ const _abi = [
     type: "event",
   },
   {
-    anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
+        internalType: "bytes",
+        name: "name",
+        type: "bytes",
       },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "Transfer",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "approve",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
       {
         internalType: "bytes",
         name: "tld",
         type: "bytes",
       },
     ],
-    name: "available",
+    name: "getExpires",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "name",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "tld",
+        type: "bytes",
+      },
+    ],
+    name: "isAvailable",
     outputs: [
       {
         internalType: "bool",
@@ -232,40 +168,16 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "domain",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
         name: "tld",
         type: "bytes",
       },
     ],
-    name: "available",
+    name: "isAvailable",
     outputs: [
       {
         internalType: "bool",
         name: "",
         type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-    ],
-    name: "balanceOf",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "balance",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -284,7 +196,7 @@ const _abi = [
         type: "address",
       },
     ],
-    name: "controllerApproved",
+    name: "isControllerApproved",
     outputs: [
       {
         internalType: "bool",
@@ -303,7 +215,7 @@ const _abi = [
         type: "bytes32",
       },
     ],
-    name: "exists",
+    name: "isExists",
     outputs: [
       {
         internalType: "bool",
@@ -318,7 +230,7 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -327,7 +239,7 @@ const _abi = [
         type: "bytes",
       },
     ],
-    name: "exists",
+    name: "isExists",
     outputs: [
       {
         internalType: "bool",
@@ -342,74 +254,7 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "domain",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "tld",
-        type: "bytes",
-      },
-    ],
-    name: "expiry",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "getApproved",
-    outputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-    ],
-    name: "isApprovedForAll",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -432,50 +277,8 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "ownerOf",
-    outputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "bytes",
-        name: "domain",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "tld",
-        type: "bytes",
-      },
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-    ],
-    name: "reclaim",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -489,9 +292,9 @@ const _abi = [
         type: "address",
       },
       {
-        internalType: "uint256",
-        name: "durations",
-        type: "uint256",
+        internalType: "uint64",
+        name: "expires",
+        type: "uint64",
       },
     ],
     name: "register",
@@ -503,7 +306,7 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -512,81 +315,12 @@ const _abi = [
         type: "bytes",
       },
       {
-        internalType: "uint256",
-        name: "durations",
-        type: "uint256",
+        internalType: "uint64",
+        name: "expires",
+        type: "uint64",
       },
     ],
     name: "renew",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "safeTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "safeTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        internalType: "bool",
-        name: "_approved",
-        type: "bool",
-      },
-    ],
-    name: "setApprovalForAll",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -610,72 +344,6 @@ const _abi = [
       },
     ],
     name: "setControllerApproval",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes4",
-        name: "interfaceId",
-        type: "bytes4",
-      },
-    ],
-    name: "supportsInterface",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "domain",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "tld",
-        type: "bytes",
-      },
-    ],
-    name: "tokenId",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "transferFrom",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

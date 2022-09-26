@@ -13,8 +13,27 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "bytes32",
+        name: "tld",
+        type: "bytes32",
+      },
+    ],
+    name: "getFee",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -28,7 +47,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "price",
+    name: "getPrice",
     outputs: [
       {
         internalType: "uint256",
@@ -37,6 +56,42 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "tld",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "fee",
+        type: "uint256",
+      },
+    ],
+    name: "setFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "tld",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256[]",
+        name: "price_",
+        type: "uint256[]",
+      },
+    ],
+    name: "setPrice",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];

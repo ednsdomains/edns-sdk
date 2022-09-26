@@ -18,11 +18,10 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface BaseResolverInterface extends ethers.utils.Interface {
+interface LabelOperatorInterface extends ethers.utils.Interface {
   functions: {
     "MAX_LABEL_LENGTH()": FunctionFragment;
     "MIN_LABEL_LENGTH()": FunctionFragment;
-    "supportsInterface(bytes4)": FunctionFragment;
     "valid(string,string,string)": FunctionFragment;
   };
 
@@ -33,10 +32,6 @@ interface BaseResolverInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "MIN_LABEL_LENGTH",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "supportsInterface",
-    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "valid",
@@ -51,16 +46,12 @@ interface BaseResolverInterface extends ethers.utils.Interface {
     functionFragment: "MIN_LABEL_LENGTH",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "supportsInterface",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "valid", data: BytesLike): Result;
 
   events: {};
 }
 
-export class BaseResolver extends BaseContract {
+export class LabelOperator extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -101,17 +92,12 @@ export class BaseResolver extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: BaseResolverInterface;
+  interface: LabelOperatorInterface;
 
   functions: {
     MAX_LABEL_LENGTH(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    supportsInterface(
-      interfaceId: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
 
     "valid(string,string,string)"(
       host: string,
@@ -144,11 +130,6 @@ export class BaseResolver extends BaseContract {
 
   MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
-  supportsInterface(
-    interfaceId: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
   "valid(string,string,string)"(
     host: string,
     arg1: string,
@@ -179,11 +160,6 @@ export class BaseResolver extends BaseContract {
     MAX_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
-
-    supportsInterface(
-      interfaceId: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
 
     "valid(string,string,string)"(
       host: string,
@@ -219,11 +195,6 @@ export class BaseResolver extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
-    supportsInterface(
-      interfaceId: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     "valid(string,string,string)"(
       host: string,
       arg1: string,
@@ -255,11 +226,6 @@ export class BaseResolver extends BaseContract {
     MAX_LABEL_LENGTH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    supportsInterface(
-      interfaceId: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     "valid(string,string,string)"(
       host: string,
