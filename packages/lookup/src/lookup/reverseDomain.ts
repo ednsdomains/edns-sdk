@@ -2,21 +2,26 @@ import {formatsByName} from "@ensdomains/address-encoder";
 import {BigNumber, ethers} from "ethers";
 import {
     BaseRegistrarImplementation__factory,
-    DefaultReverseResolver__factory, EDNSRegistrarController__factory,
+    EDNSRegistrarController__factory,
     EDNSRegistry__factory,
     PublicResolver__factory,
     ReverseRegistrar__factory,
-    ReverseResolver__factory,
 } from "../typechain";
 import {namehash} from "./namehash";
+import {
+    EDNSRegistrarController_CONTRACT_ADDRESS,
+    REGISTRAR_CONTRACT_ADDRESS,
+    REGISTRY_CONTRACT_ADDRESS,
+    RESOLVER_CONTRACT_ADDRESS,
+    REVERSE_REGISTRAR_CONTRACT_ADDRESS, RPC_ENDPOINT
+} from "../web3/useContract";
 
 const LookupDomainFromAddress = async (address: string): Promise<string | undefined> => {
-    const PUBLIC_RESOLVER_CONTRACT_ADDRESS = '0x3c2DAab0AF88B0c5505ccB585e04FB33d7C80144'
-    const REVERSE_REGISTRAR_CONTRACT_ADDRESS = '0xD986F9083F006D0E2d08c9F22247b4a0a213146D'
-    const RPC_ENDPOINT = 'https://polygon-rpc.com/';
+    // const PUBLIC_RESOLVER_CONTRACT_ADDRESS = '0x3c2DAab0AF88B0c5505ccB585e04FB33d7C80144'
+    // const REVERSE_REGISTRAR_CONTRACT_ADDRESS = '0xD986F9083F006D0E2d08c9F22247b4a0a213146D'
     //Get Contract
     const provider = new ethers.providers.JsonRpcProvider(RPC_ENDPOINT);
-    const DefaultReverseResolver = PublicResolver__factory.connect(PUBLIC_RESOLVER_CONTRACT_ADDRESS, provider);
+    const DefaultReverseResolver = PublicResolver__factory.connect(RESOLVER_CONTRACT_ADDRESS, provider);
     const Registrar = ReverseRegistrar__factory.connect(REVERSE_REGISTRAR_CONTRACT_ADDRESS, provider);
     //Get node
     const node = await Registrar.callStatic.node(address)
@@ -26,7 +31,7 @@ const LookupDomainFromAddress = async (address: string): Promise<string | undefi
 }
 
 const SetReverseDomain = async (domain: string,signer: ethers.Signer): Promise<ethers.Transaction|Error> => {
-    const REVERSE_REGISTRAR_CONTRACT_ADDRESS = '0xD986F9083F006D0E2d08c9F22247b4a0a213146D'
+    // const REVERSE_REGISTRAR_CONTRACT_ADDRESS = '0xD986F9083F006D0E2d08c9F22247b4a0a213146D'
     const Registrar = ReverseRegistrar__factory.connect(REVERSE_REGISTRAR_CONTRACT_ADDRESS, signer);
     const sender = await signer.getAddress()
     const isOwner = await ownerOfDomain(domain,sender);
@@ -39,8 +44,6 @@ const SetReverseDomain = async (domain: string,signer: ethers.Signer): Promise<e
 }
 
 const ownerOfDomain = async (domain:string,senderAddress:string): Promise<boolean|Error>=>{
-    const REGISTRY_CONTRACT_ADDRESS = '0x7c5DbFE487D01BC0C75704dBfD334198E6AB2D12'
-    const RPC_ENDPOINT = 'https://polygon-rpc.com/';
     const provider = new ethers.providers.JsonRpcProvider(RPC_ENDPOINT);
     const Regisiry = EDNSRegistry__factory.connect(REGISTRY_CONTRACT_ADDRESS, provider);
     const domainOwner = await Regisiry.callStatic.owner(namehash(domain))
@@ -58,13 +61,10 @@ const ownerOfDomain = async (domain:string,senderAddress:string): Promise<boolea
 }
 const Reclaim  = async (domain: string,signer: ethers.Signer,tokenID:string): Promise<ethers.Transaction> => {
     const [name, tld] = domain.split('.');
-    // const basenode = ethers.utils.namehash(tld);
-    const REGISTRAR_CONTRACT_ADDRESS = '0x53a0018f919bde9C254bda697966C5f448ffDDcB'
     const Registrar = BaseRegistrarImplementation__factory.connect(REGISTRAR_CONTRACT_ADDRESS, signer);
-    const RegistrarController = EDNSRegistrarController__factory.connect("0x8C856f71d71e8CF4AD9A44cDC426b09e315c6A6a", signer);
+    const RegistrarController = EDNSRegistrarController__factory.connect(EDNSRegistrarController_CONTRACT_ADDRESS, signer);
     const tokenId = BigNumber.from(tokenID);
     const sender = await signer.getAddress()
-
     const basenode = await RegistrarController.tlds(ethers.utils.toUtf8Bytes(tld));
     const transaction = await Registrar.reclaim(tokenId,basenode,sender)
     return transaction

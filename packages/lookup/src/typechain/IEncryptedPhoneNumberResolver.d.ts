@@ -19,49 +19,58 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface IPhoneNumberResolverInterface extends ethers.utils.Interface {
+interface IEncryptedPhoneNumberResolverInterface
+  extends ethers.utils.Interface {
   functions: {
-    "phoneNumber(string,string,string)": FunctionFragment;
-    "setPhoneNumber(string,string,string,bytes,bytes)": FunctionFragment;
+    "getEncryptedPhoneNumber(string,string,string)": FunctionFragment;
+    "setEncryptedPhoneNumber(string,string,string,bytes,bytes)": FunctionFragment;
+    "setEncryptedPhoneNumber_SYNC(string,string,string,bytes,bytes)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "phoneNumber",
+    functionFragment: "getEncryptedPhoneNumber",
     values: [string, string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "setPhoneNumber",
+    functionFragment: "setEncryptedPhoneNumber",
+    values: [string, string, string, BytesLike, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setEncryptedPhoneNumber_SYNC",
     values: [string, string, string, BytesLike, BytesLike]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "phoneNumber",
+    functionFragment: "getEncryptedPhoneNumber",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setPhoneNumber",
+    functionFragment: "setEncryptedPhoneNumber",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setEncryptedPhoneNumber_SYNC",
     data: BytesLike
   ): Result;
 
   events: {
-    "SetPhoneNumber(bytes,bytes,bytes,bytes,bytes,bytes)": EventFragment;
+    "SetEncryptedPhoneNumber(bytes,bytes,bytes,bytes,bytes)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "SetPhoneNumber"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetEncryptedPhoneNumber"): EventFragment;
 }
 
-export type SetPhoneNumberEvent = TypedEvent<
-  [string, string, string, string, string, string] & {
-    fqdn: string;
+export type SetEncryptedPhoneNumberEvent = TypedEvent<
+  [string, string, string, string, string] & {
     host: string;
-    domain: string;
+    name: string;
     tld: string;
     payload: string;
     signature: string;
   }
 >;
 
-export class IPhoneNumberResolver extends BaseContract {
+export class IEncryptedPhoneNumberResolver extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -102,29 +111,28 @@ export class IPhoneNumberResolver extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: IPhoneNumberResolverInterface;
+  interface: IEncryptedPhoneNumberResolverInterface;
 
   functions: {
-    "phoneNumber(string,string,string)"(
+    getEncryptedPhoneNumber(
       host: string,
-      domain: string,
+      name: string,
       tld: string,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    "phoneNumber(string)"(
-      fqdn: string,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    "phoneNumber(bytes32)"(
-      fqdn: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    setPhoneNumber(
+    setEncryptedPhoneNumber(
       host: string,
-      domain: string,
+      name: string,
+      tld: string,
+      payload: BytesLike,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setEncryptedPhoneNumber_SYNC(
+      host: string,
+      name: string,
       tld: string,
       payload: BytesLike,
       signature: BytesLike,
@@ -132,26 +140,25 @@ export class IPhoneNumberResolver extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  "phoneNumber(string,string,string)"(
+  getEncryptedPhoneNumber(
     host: string,
-    domain: string,
+    name: string,
     tld: string,
     overrides?: CallOverrides
   ): Promise<string>;
 
-  "phoneNumber(string)"(
-    fqdn: string,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  "phoneNumber(bytes32)"(
-    fqdn: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  setPhoneNumber(
+  setEncryptedPhoneNumber(
     host: string,
-    domain: string,
+    name: string,
+    tld: string,
+    payload: BytesLike,
+    signature: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setEncryptedPhoneNumber_SYNC(
+    host: string,
+    name: string,
     tld: string,
     payload: BytesLike,
     signature: BytesLike,
@@ -159,26 +166,25 @@ export class IPhoneNumberResolver extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    "phoneNumber(string,string,string)"(
+    getEncryptedPhoneNumber(
       host: string,
-      domain: string,
+      name: string,
       tld: string,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    "phoneNumber(string)"(
-      fqdn: string,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    "phoneNumber(bytes32)"(
-      fqdn: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    setPhoneNumber(
+    setEncryptedPhoneNumber(
       host: string,
-      domain: string,
+      name: string,
+      tld: string,
+      payload: BytesLike,
+      signature: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setEncryptedPhoneNumber_SYNC(
+      host: string,
+      name: string,
       tld: string,
       payload: BytesLike,
       signature: BytesLike,
@@ -187,38 +193,34 @@ export class IPhoneNumberResolver extends BaseContract {
   };
 
   filters: {
-    "SetPhoneNumber(bytes,bytes,bytes,bytes,bytes,bytes)"(
-      fqdn?: null,
+    "SetEncryptedPhoneNumber(bytes,bytes,bytes,bytes,bytes)"(
       host?: null,
-      domain?: null,
+      name?: null,
       tld?: null,
       payload?: null,
       signature?: null
     ): TypedEventFilter<
-      [string, string, string, string, string, string],
+      [string, string, string, string, string],
       {
-        fqdn: string;
         host: string;
-        domain: string;
+        name: string;
         tld: string;
         payload: string;
         signature: string;
       }
     >;
 
-    SetPhoneNumber(
-      fqdn?: null,
+    SetEncryptedPhoneNumber(
       host?: null,
-      domain?: null,
+      name?: null,
       tld?: null,
       payload?: null,
       signature?: null
     ): TypedEventFilter<
-      [string, string, string, string, string, string],
+      [string, string, string, string, string],
       {
-        fqdn: string;
         host: string;
-        domain: string;
+        name: string;
         tld: string;
         payload: string;
         signature: string;
@@ -227,26 +229,25 @@ export class IPhoneNumberResolver extends BaseContract {
   };
 
   estimateGas: {
-    "phoneNumber(string,string,string)"(
+    getEncryptedPhoneNumber(
       host: string,
-      domain: string,
+      name: string,
       tld: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "phoneNumber(string)"(
-      fqdn: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "phoneNumber(bytes32)"(
-      fqdn: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    setPhoneNumber(
+    setEncryptedPhoneNumber(
       host: string,
-      domain: string,
+      name: string,
+      tld: string,
+      payload: BytesLike,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setEncryptedPhoneNumber_SYNC(
+      host: string,
+      name: string,
       tld: string,
       payload: BytesLike,
       signature: BytesLike,
@@ -255,26 +256,25 @@ export class IPhoneNumberResolver extends BaseContract {
   };
 
   populateTransaction: {
-    "phoneNumber(string,string,string)"(
+    getEncryptedPhoneNumber(
       host: string,
-      domain: string,
+      name: string,
       tld: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "phoneNumber(string)"(
-      fqdn: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "phoneNumber(bytes32)"(
-      fqdn: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    setPhoneNumber(
+    setEncryptedPhoneNumber(
       host: string,
-      domain: string,
+      name: string,
+      tld: string,
+      payload: BytesLike,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setEncryptedPhoneNumber_SYNC(
+      host: string,
+      name: string,
       tld: string,
       payload: BytesLike,
       signature: BytesLike,

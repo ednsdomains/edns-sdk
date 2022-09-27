@@ -21,58 +21,32 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface INFTResolverInterface extends ethers.utils.Interface {
   functions: {
-    "nft(bytes32,uint256)": FunctionFragment;
-    "setNFT(bytes,bytes,bytes,uint256,address,uint256)": FunctionFragment;
-    "setNFT_SYNC(bytes,bytes,bytes,uint256,address,uint256)": FunctionFragment;
+    "getNFT(bytes32,uint256)": FunctionFragment;
+    "setNFT(bytes32,uint256,address,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "nft",
+    functionFragment: "getNFT",
     values: [BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "setNFT",
-    values: [
-      BytesLike,
-      BytesLike,
-      BytesLike,
-      BigNumberish,
-      string,
-      BigNumberish
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setNFT_SYNC",
-    values: [
-      BytesLike,
-      BytesLike,
-      BytesLike,
-      BigNumberish,
-      string,
-      BigNumberish
-    ]
+    values: [BytesLike, BigNumberish, string, BigNumberish]
   ): string;
 
-  decodeFunctionResult(functionFragment: "nft", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setNFT", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setNFT_SYNC",
-    data: BytesLike
-  ): Result;
 
   events: {
-    "SetNFT(bytes,bytes,bytes,bytes,uint256,address,uint256)": EventFragment;
+    "NFTChanged(bytes32,uint256,address,uint256)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "SetNFT"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "NFTChanged"): EventFragment;
 }
 
-export type SetNFTEvent = TypedEvent<
-  [string, string, string, string, BigNumber, string, BigNumber] & {
-    fqdn: string;
-    host: string;
-    domain: string;
-    tld: string;
+export type NFTChangedEvent = TypedEvent<
+  [string, BigNumber, string, BigNumber] & {
+    node: string;
     chainId: BigNumber;
     contractAddress: string;
     tokenId: BigNumber;
@@ -123,172 +97,82 @@ export class INFTResolver extends BaseContract {
   interface: INFTResolverInterface;
 
   functions: {
-    "nft(bytes32,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [[string, BigNumber] & { contract_: string; tokenId: BigNumber }]
-    >;
-
-    "nft(bytes,bytes,bytes,uint256)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [[string, BigNumber] & { contract_: string; tokenId: BigNumber }]
-    >;
-
-    "nft(bytes,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [[string, BigNumber] & { contract_: string; tokenId: BigNumber }]
-    >;
-
-    setNFT(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      contract_: string,
-      tokenId: BigNumberish,
+    getNFT(
+      node: BytesLike,
+      chainID: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setNFT_SYNC(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
+    setNFT(
+      node: BytesLike,
       chainId: BigNumberish,
-      contract_: string,
+      contractAddress: string,
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
-  "nft(bytes32,uint256)"(
-    fqdn: BytesLike,
-    chainId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
-
-  "nft(bytes,bytes,bytes,uint256)"(
-    host: BytesLike,
-    domain: BytesLike,
-    tld: BytesLike,
-    chainId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
-
-  "nft(bytes,uint256)"(
-    fqdn: BytesLike,
-    chainId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
-
-  setNFT(
-    host: BytesLike,
-    domain: BytesLike,
-    tld: BytesLike,
-    chainId: BigNumberish,
-    contract_: string,
-    tokenId: BigNumberish,
+  getNFT(
+    node: BytesLike,
+    chainID: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setNFT_SYNC(
-    host: BytesLike,
-    domain: BytesLike,
-    tld: BytesLike,
+  setNFT(
+    node: BytesLike,
     chainId: BigNumberish,
-    contract_: string,
+    contractAddress: string,
     tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    "nft(bytes32,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
+    getNFT(
+      node: BytesLike,
+      chainID: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
-
-    "nft(bytes,bytes,bytes,uint256)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
-
-    "nft(bytes,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
-
-    setNFT(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      contract_: string,
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setNFT_SYNC(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      contract_: string,
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-  };
-
-  filters: {
-    "SetNFT(bytes,bytes,bytes,bytes,uint256,address,uint256)"(
-      fqdn?: null,
-      host?: null,
-      domain?: null,
-      tld?: null,
-      chainId?: null,
-      contractAddress?: null,
-      tokenId?: null
-    ): TypedEventFilter<
-      [string, string, string, string, BigNumber, string, BigNumber],
-      {
-        fqdn: string;
-        host: string;
-        domain: string;
-        tld: string;
+    ): Promise<
+      [BigNumber, string, BigNumber] & {
         chainId: BigNumber;
         contractAddress: string;
         tokenId: BigNumber;
       }
     >;
 
-    SetNFT(
-      fqdn?: null,
-      host?: null,
-      domain?: null,
-      tld?: null,
+    setNFT(
+      node: BytesLike,
+      chainId: BigNumberish,
+      contractAddress: string,
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+  };
+
+  filters: {
+    "NFTChanged(bytes32,uint256,address,uint256)"(
+      node?: BytesLike | null,
       chainId?: null,
       contractAddress?: null,
       tokenId?: null
     ): TypedEventFilter<
-      [string, string, string, string, BigNumber, string, BigNumber],
+      [string, BigNumber, string, BigNumber],
       {
-        fqdn: string;
-        host: string;
-        domain: string;
-        tld: string;
+        node: string;
+        chainId: BigNumber;
+        contractAddress: string;
+        tokenId: BigNumber;
+      }
+    >;
+
+    NFTChanged(
+      node?: BytesLike | null,
+      chainId?: null,
+      contractAddress?: null,
+      tokenId?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, BigNumber],
+      {
+        node: string;
         chainId: BigNumber;
         contractAddress: string;
         tokenId: BigNumber;
@@ -297,84 +181,32 @@ export class INFTResolver extends BaseContract {
   };
 
   estimateGas: {
-    "nft(bytes32,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "nft(bytes,bytes,bytes,uint256)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "nft(bytes,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    setNFT(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      contract_: string,
-      tokenId: BigNumberish,
+    getNFT(
+      node: BytesLike,
+      chainID: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setNFT_SYNC(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
+    setNFT(
+      node: BytesLike,
       chainId: BigNumberish,
-      contract_: string,
+      contractAddress: string,
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    "nft(bytes32,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "nft(bytes,bytes,bytes,uint256)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "nft(bytes,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    setNFT(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      contract_: string,
-      tokenId: BigNumberish,
+    getNFT(
+      node: BytesLike,
+      chainID: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setNFT_SYNC(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
+    setNFT(
+      node: BytesLike,
       chainId: BigNumberish,
-      contract_: string,
+      contractAddress: string,
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

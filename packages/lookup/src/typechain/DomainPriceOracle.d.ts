@@ -23,13 +23,15 @@ interface DomainPriceOracleInterface extends ethers.utils.Interface {
   functions: {
     "ADMIN_ROLE()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
+    "getFee(bytes32)": FunctionFragment;
+    "getPrice(bytes,bytes32,uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
     "initialize(address)": FunctionFragment;
-    "price(bytes,bytes32,uint256)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
+    "setFee(bytes32,uint256)": FunctionFragment;
     "setPrice(bytes32,uint256[])": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
   };
@@ -41,6 +43,11 @@ interface DomainPriceOracleInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "DEFAULT_ADMIN_ROLE",
     values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "getFee", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "getPrice",
+    values: [BytesLike, BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
@@ -56,16 +63,16 @@ interface DomainPriceOracleInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "initialize", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "price",
-    values: [BytesLike, BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "renounceRole",
     values: [BytesLike, string]
   ): string;
   encodeFunctionData(
     functionFragment: "revokeRole",
     values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setFee",
+    values: [BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "setPrice",
@@ -81,6 +88,8 @@ interface DomainPriceOracleInterface extends ethers.utils.Interface {
     functionFragment: "DEFAULT_ADMIN_ROLE",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getFee", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
     data: BytesLike
@@ -88,12 +97,12 @@ interface DomainPriceOracleInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceRole",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setPrice", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
@@ -175,6 +184,15 @@ export class DomainPriceOracle extends BaseContract {
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
+    getFee(tld: BytesLike, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getPrice(
+      name: BytesLike,
+      tld: BytesLike,
+      durations: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
     grantRole(
@@ -194,13 +212,6 @@ export class DomainPriceOracle extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    price(
-      domain: BytesLike,
-      tld: BytesLike,
-      durations: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     renounceRole(
       role: BytesLike,
       account: string,
@@ -210,6 +221,12 @@ export class DomainPriceOracle extends BaseContract {
     revokeRole(
       role: BytesLike,
       account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setFee(
+      tld: BytesLike,
+      fee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -228,6 +245,15 @@ export class DomainPriceOracle extends BaseContract {
   ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+
+  getFee(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+  getPrice(
+    name: BytesLike,
+    tld: BytesLike,
+    durations: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
@@ -248,13 +274,6 @@ export class DomainPriceOracle extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  price(
-    domain: BytesLike,
-    tld: BytesLike,
-    durations: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   renounceRole(
     role: BytesLike,
     account: string,
@@ -264,6 +283,12 @@ export class DomainPriceOracle extends BaseContract {
   revokeRole(
     role: BytesLike,
     account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setFee(
+    tld: BytesLike,
+    fee: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -283,6 +308,15 @@ export class DomainPriceOracle extends BaseContract {
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
+    getFee(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    getPrice(
+      name: BytesLike,
+      tld: BytesLike,
+      durations: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
     grantRole(
@@ -299,13 +333,6 @@ export class DomainPriceOracle extends BaseContract {
 
     initialize(tokenPrice_: string, overrides?: CallOverrides): Promise<void>;
 
-    price(
-      domain: BytesLike,
-      tld: BytesLike,
-      durations: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     renounceRole(
       role: BytesLike,
       account: string,
@@ -315,6 +342,12 @@ export class DomainPriceOracle extends BaseContract {
     revokeRole(
       role: BytesLike,
       account: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setFee(
+      tld: BytesLike,
+      fee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -391,6 +424,15 @@ export class DomainPriceOracle extends BaseContract {
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getFee(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    getPrice(
+      name: BytesLike,
+      tld: BytesLike,
+      durations: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getRoleAdmin(
       role: BytesLike,
       overrides?: CallOverrides
@@ -413,13 +455,6 @@ export class DomainPriceOracle extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    price(
-      domain: BytesLike,
-      tld: BytesLike,
-      durations: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     renounceRole(
       role: BytesLike,
       account: string,
@@ -429,6 +464,12 @@ export class DomainPriceOracle extends BaseContract {
     revokeRole(
       role: BytesLike,
       account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setFee(
+      tld: BytesLike,
+      fee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -451,6 +492,18 @@ export class DomainPriceOracle extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getFee(
+      tld: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPrice(
+      name: BytesLike,
+      tld: BytesLike,
+      durations: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getRoleAdmin(
       role: BytesLike,
       overrides?: CallOverrides
@@ -473,13 +526,6 @@ export class DomainPriceOracle extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    price(
-      domain: BytesLike,
-      tld: BytesLike,
-      durations: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     renounceRole(
       role: BytesLike,
       account: string,
@@ -489,6 +535,12 @@ export class DomainPriceOracle extends BaseContract {
     revokeRole(
       role: BytesLike,
       account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setFee(
+      tld: BytesLike,
+      fee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

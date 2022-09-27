@@ -19,50 +19,29 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface IReverseResolverInterface extends ethers.utils.Interface {
+interface IClassicalRegistrarControllerInterface
+  extends ethers.utils.Interface {
   functions: {
-    "reverse(bytes)": FunctionFragment;
-    "setReverseRecord(bytes,bytes,bytes,bytes)": FunctionFragment;
-    "setReverseRecord_SYNC(bytes,bytes,bytes,bytes)": FunctionFragment;
+    "register(bytes,bytes,address,uint64)": FunctionFragment;
+    "renew(bytes,bytes,uint64)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "reverse", values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "setReverseRecord",
-    values: [BytesLike, BytesLike, BytesLike, BytesLike]
+    functionFragment: "register",
+    values: [BytesLike, BytesLike, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "setReverseRecord_SYNC",
-    values: [BytesLike, BytesLike, BytesLike, BytesLike]
+    functionFragment: "renew",
+    values: [BytesLike, BytesLike, BigNumberish]
   ): string;
 
-  decodeFunctionResult(functionFragment: "reverse", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setReverseRecord",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setReverseRecord_SYNC",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "renew", data: BytesLike): Result;
 
-  events: {
-    "SetReverseRecord(bytes,bytes,bytes,bytes)": EventFragment;
-  };
-
-  getEvent(nameOrSignatureOrTopic: "SetReverseRecord"): EventFragment;
+  events: {};
 }
 
-export type SetReverseRecordEvent = TypedEvent<
-  [string, string, string, string] & {
-    host: string;
-    domain: string;
-    tld: string;
-    address_: string;
-  }
->;
-
-export class IReverseResolver extends BaseContract {
+export class IClassicalRegistrarController extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -103,127 +82,89 @@ export class IReverseResolver extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: IReverseResolverInterface;
+  interface: IClassicalRegistrarControllerInterface;
 
   functions: {
-    reverse(address_: BytesLike, overrides?: CallOverrides): Promise<[string]>;
-
-    setReverseRecord(
-      host: BytesLike,
-      domain: BytesLike,
+    register(
+      name: BytesLike,
       tld: BytesLike,
-      address_: BytesLike,
+      owner: string,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setReverseRecord_SYNC(
-      host: BytesLike,
-      domain: BytesLike,
+    renew(
+      name: BytesLike,
       tld: BytesLike,
-      address_: BytesLike,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
-  reverse(address_: BytesLike, overrides?: CallOverrides): Promise<string>;
-
-  setReverseRecord(
-    host: BytesLike,
-    domain: BytesLike,
+  register(
+    name: BytesLike,
     tld: BytesLike,
-    address_: BytesLike,
+    owner: string,
+    expires: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setReverseRecord_SYNC(
-    host: BytesLike,
-    domain: BytesLike,
+  renew(
+    name: BytesLike,
     tld: BytesLike,
-    address_: BytesLike,
+    expires: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    reverse(address_: BytesLike, overrides?: CallOverrides): Promise<string>;
-
-    setReverseRecord(
-      host: BytesLike,
-      domain: BytesLike,
+    register(
+      name: BytesLike,
       tld: BytesLike,
-      address_: BytesLike,
+      owner: string,
+      expires: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setReverseRecord_SYNC(
-      host: BytesLike,
-      domain: BytesLike,
+    renew(
+      name: BytesLike,
       tld: BytesLike,
-      address_: BytesLike,
+      expires: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
-  filters: {
-    "SetReverseRecord(bytes,bytes,bytes,bytes)"(
-      host?: null,
-      domain?: null,
-      tld?: null,
-      address_?: null
-    ): TypedEventFilter<
-      [string, string, string, string],
-      { host: string; domain: string; tld: string; address_: string }
-    >;
-
-    SetReverseRecord(
-      host?: null,
-      domain?: null,
-      tld?: null,
-      address_?: null
-    ): TypedEventFilter<
-      [string, string, string, string],
-      { host: string; domain: string; tld: string; address_: string }
-    >;
-  };
+  filters: {};
 
   estimateGas: {
-    reverse(address_: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
-
-    setReverseRecord(
-      host: BytesLike,
-      domain: BytesLike,
+    register(
+      name: BytesLike,
       tld: BytesLike,
-      address_: BytesLike,
+      owner: string,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setReverseRecord_SYNC(
-      host: BytesLike,
-      domain: BytesLike,
+    renew(
+      name: BytesLike,
       tld: BytesLike,
-      address_: BytesLike,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    reverse(
-      address_: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    setReverseRecord(
-      host: BytesLike,
-      domain: BytesLike,
+    register(
+      name: BytesLike,
       tld: BytesLike,
-      address_: BytesLike,
+      owner: string,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setReverseRecord_SYNC(
-      host: BytesLike,
-      domain: BytesLike,
+    renew(
+      name: BytesLike,
       tld: BytesLike,
-      address_: BytesLike,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

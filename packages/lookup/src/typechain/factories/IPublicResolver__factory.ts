@@ -22,7 +22,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -33,15 +33,9 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "uint256",
-        name: "coin",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "bytes",
+        internalType: "address",
         name: "address_",
-        type: "bytes",
+        type: "address",
       },
     ],
     name: "SetAddress",
@@ -53,19 +47,13 @@ const _abi = [
       {
         indexed: false,
         internalType: "bytes",
-        name: "fqdn",
-        type: "bytes",
-      },
-      {
-        indexed: false,
-        internalType: "bytes",
         name: "host",
         type: "bytes",
       },
       {
         indexed: false,
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -97,6 +85,37 @@ const _abi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bytes",
+        name: "host",
+        type: "bytes",
+      },
+      {
+        indexed: false,
+        internalType: "bytes",
+        name: "name",
+        type: "bytes",
+      },
+      {
+        indexed: false,
+        internalType: "bytes",
+        name: "tld",
+        type: "bytes",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "address_",
+        type: "address",
+      },
+    ],
+    name: "SetReverseAddress",
+    type: "event",
+  },
+  {
     inputs: [
       {
         internalType: "bytes",
@@ -105,7 +124,7 @@ const _abi = [
       },
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -113,69 +132,16 @@ const _abi = [
         name: "tld",
         type: "bytes",
       },
-      {
-        internalType: "uint256",
-        name: "coin",
-        type: "uint256",
-      },
     ],
-    name: "addr",
+    name: "getAddress",
     outputs: [
       {
-        internalType: "bytes",
+        internalType: "address",
         name: "",
-        type: "bytes",
+        type: "address",
       },
     ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "fqdn",
-        type: "bytes",
-      },
-      {
-        internalType: "uint256",
-        name: "coin",
-        type: "uint256",
-      },
-    ],
-    name: "addr",
-    outputs: [
-      {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "fqdn",
-        type: "bytes32",
-      },
-      {
-        internalType: "uint256",
-        name: "coin",
-        type: "uint256",
-      },
-    ],
-    name: "addr",
-    outputs: [
-      {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
-    ],
-    stateMutability: "view",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -191,7 +157,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "nft",
+    name: "getNFT",
     outputs: [
       {
         components: [
@@ -217,114 +183,46 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "bytes",
-        name: "host",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "domain",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "tld",
-        type: "bytes",
-      },
-      {
-        internalType: "uint256",
-        name: "chainId",
-        type: "uint256",
-      },
-    ],
-    name: "nft",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "contract_",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct INFTResolver.NFT",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "fqdn",
-        type: "bytes",
-      },
-      {
-        internalType: "uint256",
-        name: "chainId",
-        type: "uint256",
-      },
-    ],
-    name: "nft",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "contract_",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct INFTResolver.NFT",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "host",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "domain",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "tld",
-        type: "bytes",
-      },
-      {
-        internalType: "uint256",
-        name: "coin",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
+        internalType: "address",
         name: "address_",
+        type: "address",
+      },
+    ],
+    name: "getReverseAddress",
+    outputs: [
+      {
+        internalType: "bytes",
+        name: "",
         type: "bytes",
       },
     ],
-    name: "setAddr",
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "host",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "name",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "tld",
+        type: "bytes",
+      },
+      {
+        internalType: "address",
+        name: "address_",
+        type: "address",
+      },
+    ],
+    name: "setAddress",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -338,7 +236,7 @@ const _abi = [
       },
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -347,17 +245,12 @@ const _abi = [
         type: "bytes",
       },
       {
-        internalType: "uint256",
-        name: "coin",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
+        internalType: "address",
         name: "address_",
-        type: "bytes",
+        type: "address",
       },
     ],
-    name: "setAddr_SYNC",
+    name: "setAddress_SYNC",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -371,7 +264,7 @@ const _abi = [
       },
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -409,7 +302,7 @@ const _abi = [
       },
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -434,6 +327,62 @@ const _abi = [
       },
     ],
     name: "setNFT_SYNC",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "host",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "name",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "tld",
+        type: "bytes",
+      },
+      {
+        internalType: "address",
+        name: "address_",
+        type: "address",
+      },
+    ],
+    name: "setReverseAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "host",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "name",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "tld",
+        type: "bytes",
+      },
+      {
+        internalType: "address",
+        name: "address_",
+        type: "address",
+      },
+    ],
+    name: "setReverseAddress_SYNC",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

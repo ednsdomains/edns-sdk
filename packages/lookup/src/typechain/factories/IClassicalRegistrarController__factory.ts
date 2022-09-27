@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
 import type {
-  ISingletonRegistrarController,
-  ISingletonRegistrarControllerInterface,
-} from "../ISingletonRegistrarController";
+  IClassicalRegistrarController,
+  IClassicalRegistrarControllerInterface,
+} from "../IClassicalRegistrarController";
 
 const _abi = [
   {
@@ -63,19 +63,19 @@ const _abi = [
   },
 ];
 
-export class ISingletonRegistrarController__factory {
+export class IClassicalRegistrarController__factory {
   static readonly abi = _abi;
-  static createInterface(): ISingletonRegistrarControllerInterface {
-    return new utils.Interface(_abi) as ISingletonRegistrarControllerInterface;
+  static createInterface(): IClassicalRegistrarControllerInterface {
+    return new utils.Interface(_abi) as IClassicalRegistrarControllerInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ISingletonRegistrarController {
+  ): IClassicalRegistrarController {
     return new Contract(
       address,
       _abi,
       signerOrProvider
-    ) as ISingletonRegistrarController;
+    ) as IClassicalRegistrarController;
   }
 }

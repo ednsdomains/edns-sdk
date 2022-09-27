@@ -19,37 +19,57 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface IDomainPriceOracleInterface extends ethers.utils.Interface {
+interface IMultiCoinAddressResolverInterface extends ethers.utils.Interface {
   functions: {
-    "getFee(bytes32)": FunctionFragment;
-    "getPrice(bytes,bytes32,uint256)": FunctionFragment;
-    "setFee(bytes32,uint256)": FunctionFragment;
-    "setPrice(bytes32,uint256[])": FunctionFragment;
+    "getMultiCoinAddress(bytes,bytes,bytes,uint256)": FunctionFragment;
+    "setMultiCoinAddress(bytes,bytes,bytes,uint256,bytes)": FunctionFragment;
+    "setMultiCoinAddress_SYNC(bytes,bytes,bytes,uint256,bytes)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "getFee", values: [BytesLike]): string;
   encodeFunctionData(
-    functionFragment: "getPrice",
-    values: [BytesLike, BytesLike, BigNumberish]
+    functionFragment: "getMultiCoinAddress",
+    values: [BytesLike, BytesLike, BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "setFee",
-    values: [BytesLike, BigNumberish]
+    functionFragment: "setMultiCoinAddress",
+    values: [BytesLike, BytesLike, BytesLike, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "setPrice",
-    values: [BytesLike, BigNumberish[]]
+    functionFragment: "setMultiCoinAddress_SYNC",
+    values: [BytesLike, BytesLike, BytesLike, BigNumberish, BytesLike]
   ): string;
 
-  decodeFunctionResult(functionFragment: "getFee", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setFee", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setPrice", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getMultiCoinAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMultiCoinAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMultiCoinAddress_SYNC",
+    data: BytesLike
+  ): Result;
 
-  events: {};
+  events: {
+    "SetMultiCoinAddress(bytes,bytes,bytes,uint256,bytes)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "SetMultiCoinAddress"): EventFragment;
 }
 
-export class IDomainPriceOracle extends BaseContract {
+export type SetMultiCoinAddressEvent = TypedEvent<
+  [string, string, string, BigNumber, string] & {
+    host: string;
+    name: string;
+    tld: string;
+    coin: BigNumber;
+    address_: string;
+  }
+>;
+
+export class IMultiCoinAddressResolver extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -90,122 +110,178 @@ export class IDomainPriceOracle extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: IDomainPriceOracleInterface;
+  interface: IMultiCoinAddressResolverInterface;
 
   functions: {
-    getFee(tld: BytesLike, overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getPrice(
+    getMultiCoinAddress(
+      host: BytesLike,
       name: BytesLike,
       tld: BytesLike,
-      durations: BigNumberish,
+      coin: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[string]>;
 
-    setFee(
+    setMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      fee: BigNumberish,
+      coin: BigNumberish,
+      address_: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setPrice(
+    setMultiCoinAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      price_: BigNumberish[],
+      coin: BigNumberish,
+      address_: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
-  getFee(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
-
-  getPrice(
+  getMultiCoinAddress(
+    host: BytesLike,
     name: BytesLike,
     tld: BytesLike,
-    durations: BigNumberish,
+    coin: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<string>;
 
-  setFee(
+  setMultiCoinAddress(
+    host: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
-    fee: BigNumberish,
+    coin: BigNumberish,
+    address_: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setPrice(
+  setMultiCoinAddress_SYNC(
+    host: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
-    price_: BigNumberish[],
+    coin: BigNumberish,
+    address_: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    getFee(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPrice(
+    getMultiCoinAddress(
+      host: BytesLike,
       name: BytesLike,
       tld: BytesLike,
-      durations: BigNumberish,
+      coin: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<string>;
 
-    setFee(
+    setMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      fee: BigNumberish,
+      coin: BigNumberish,
+      address_: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setPrice(
+    setMultiCoinAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      price_: BigNumberish[],
+      coin: BigNumberish,
+      address_: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    "SetMultiCoinAddress(bytes,bytes,bytes,uint256,bytes)"(
+      host?: null,
+      name?: null,
+      tld?: null,
+      coin?: null,
+      address_?: null
+    ): TypedEventFilter<
+      [string, string, string, BigNumber, string],
+      {
+        host: string;
+        name: string;
+        tld: string;
+        coin: BigNumber;
+        address_: string;
+      }
+    >;
+
+    SetMultiCoinAddress(
+      host?: null,
+      name?: null,
+      tld?: null,
+      coin?: null,
+      address_?: null
+    ): TypedEventFilter<
+      [string, string, string, BigNumber, string],
+      {
+        host: string;
+        name: string;
+        tld: string;
+        coin: BigNumber;
+        address_: string;
+      }
+    >;
+  };
 
   estimateGas: {
-    getFee(tld: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
-
-    getPrice(
+    getMultiCoinAddress(
+      host: BytesLike,
       name: BytesLike,
       tld: BytesLike,
-      durations: BigNumberish,
+      coin: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    setFee(
+    setMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      fee: BigNumberish,
+      coin: BigNumberish,
+      address_: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setPrice(
+    setMultiCoinAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      price_: BigNumberish[],
+      coin: BigNumberish,
+      address_: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    getFee(
-      tld: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getPrice(
+    getMultiCoinAddress(
+      host: BytesLike,
       name: BytesLike,
       tld: BytesLike,
-      durations: BigNumberish,
+      coin: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    setFee(
+    setMultiCoinAddress(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      fee: BigNumberish,
+      coin: BigNumberish,
+      address_: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setPrice(
+    setMultiCoinAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      price_: BigNumberish[],
+      coin: BigNumberish,
+      address_: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

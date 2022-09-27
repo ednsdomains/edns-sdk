@@ -13,6 +13,11 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint16[]",
+        name: "lzChainIds",
+        type: "uint16[]",
+      },
+      {
         internalType: "bytes",
         name: "payload",
         type: "bytes",
@@ -31,6 +36,11 @@ const _abi = [
   },
   {
     inputs: [
+      {
+        internalType: "uint16[]",
+        name: "lzChainIds",
+        type: "uint16[]",
+      },
       {
         internalType: "bytes",
         name: "payload",

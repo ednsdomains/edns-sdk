@@ -4,10 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
-import type {
-  LabelValidator,
-  LabelValidatorInterface,
-} from "../LabelValidator";
+import type { LabelOperator, LabelOperatorInterface } from "../LabelOperator";
 
 const _abi = [
   {
@@ -69,7 +66,7 @@ const _abi = [
     inputs: [
       {
         internalType: "string",
-        name: "domain",
+        name: "name",
         type: "string",
       },
       {
@@ -93,7 +90,7 @@ const _abi = [
     inputs: [
       {
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -144,15 +141,15 @@ const _abi = [
   },
 ];
 
-export class LabelValidator__factory {
+export class LabelOperator__factory {
   static readonly abi = _abi;
-  static createInterface(): LabelValidatorInterface {
-    return new utils.Interface(_abi) as LabelValidatorInterface;
+  static createInterface(): LabelOperatorInterface {
+    return new utils.Interface(_abi) as LabelOperatorInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): LabelValidator {
-    return new Contract(address, _abi, signerOrProvider) as LabelValidator;
+  ): LabelOperator {
+    return new Contract(address, _abi, signerOrProvider) as LabelOperator;
   }
 }

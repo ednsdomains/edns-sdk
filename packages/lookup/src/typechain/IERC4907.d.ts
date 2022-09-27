@@ -19,29 +19,49 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface ISingletonRegistrarControllerInterface
-  extends ethers.utils.Interface {
+interface IERC4907Interface extends ethers.utils.Interface {
   functions: {
-    "register(bytes,bytes,address,uint64)": FunctionFragment;
-    "renew(bytes,bytes,uint64)": FunctionFragment;
+    "setUser(uint256,address,uint64)": FunctionFragment;
+    "userExpires(uint256)": FunctionFragment;
+    "userOf(uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "register",
-    values: [BytesLike, BytesLike, string, BigNumberish]
+    functionFragment: "setUser",
+    values: [BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "renew",
-    values: [BytesLike, BytesLike, BigNumberish]
+    functionFragment: "userExpires",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "userOf",
+    values: [BigNumberish]
   ): string;
 
-  decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "renew", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setUser", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "userExpires",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "userOf", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "UpdateUser(uint256,address,uint64)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "UpdateUser"): EventFragment;
 }
 
-export class ISingletonRegistrarController extends BaseContract {
+export type UpdateUserEvent = TypedEvent<
+  [BigNumber, string, BigNumber] & {
+    tokenId: BigNumber;
+    user: string;
+    expires: BigNumber;
+  }
+>;
+
+export class IERC4907 extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -82,90 +102,109 @@ export class ISingletonRegistrarController extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: ISingletonRegistrarControllerInterface;
+  interface: IERC4907Interface;
 
   functions: {
-    register(
-      name: BytesLike,
-      tld: BytesLike,
-      owner: string,
+    setUser(
+      tokenId: BigNumberish,
+      user: string,
       expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    renew(
-      name: BytesLike,
-      tld: BytesLike,
-      expires: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    userExpires(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    userOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
   };
 
-  register(
-    name: BytesLike,
-    tld: BytesLike,
-    owner: string,
+  setUser(
+    tokenId: BigNumberish,
+    user: string,
     expires: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  renew(
-    name: BytesLike,
-    tld: BytesLike,
-    expires: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  userExpires(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  userOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    register(
-      name: BytesLike,
-      tld: BytesLike,
-      owner: string,
+    setUser(
+      tokenId: BigNumberish,
+      user: string,
       expires: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    renew(
-      name: BytesLike,
-      tld: BytesLike,
-      expires: BigNumberish,
+    userExpires(
+      tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
+
+    userOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
   };
 
-  filters: {};
+  filters: {
+    "UpdateUser(uint256,address,uint64)"(
+      tokenId?: BigNumberish | null,
+      user?: string | null,
+      expires?: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber],
+      { tokenId: BigNumber; user: string; expires: BigNumber }
+    >;
+
+    UpdateUser(
+      tokenId?: BigNumberish | null,
+      user?: string | null,
+      expires?: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber],
+      { tokenId: BigNumber; user: string; expires: BigNumber }
+    >;
+  };
 
   estimateGas: {
-    register(
-      name: BytesLike,
-      tld: BytesLike,
-      owner: string,
+    setUser(
+      tokenId: BigNumberish,
+      user: string,
       expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    renew(
-      name: BytesLike,
-      tld: BytesLike,
-      expires: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+    userExpires(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    userOf(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    register(
-      name: BytesLike,
-      tld: BytesLike,
-      owner: string,
+    setUser(
+      tokenId: BigNumberish,
+      user: string,
       expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    renew(
-      name: BytesLike,
-      tld: BytesLike,
-      expires: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+    userExpires(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    userOf(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

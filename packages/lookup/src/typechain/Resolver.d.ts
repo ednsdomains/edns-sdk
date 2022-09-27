@@ -26,6 +26,7 @@ interface ResolverInterface extends ethers.utils.Interface {
     "content(bytes32)": FunctionFragment;
     "contenthash(bytes32)": FunctionFragment;
     "dnsRecord(bytes32,bytes32,uint16)": FunctionFragment;
+    "getNFT(bytes32,uint256)": FunctionFragment;
     "interfaceImplementer(bytes32,bytes4)": FunctionFragment;
     "multicall(bytes[])": FunctionFragment;
     "multihash(bytes32)": FunctionFragment;
@@ -38,6 +39,7 @@ interface ResolverInterface extends ethers.utils.Interface {
     "setDnsrr(bytes32,bytes)": FunctionFragment;
     "setInterface(bytes32,bytes4,address)": FunctionFragment;
     "setMultihash(bytes32,bytes)": FunctionFragment;
+    "setNFT(bytes32,uint256,address,uint256)": FunctionFragment;
     "setName(bytes32,string)": FunctionFragment;
     "setPubkey(bytes32,bytes32,bytes32)": FunctionFragment;
     "setText(bytes32,string,string)": FunctionFragment;
@@ -59,6 +61,10 @@ interface ResolverInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "dnsRecord",
     values: [BytesLike, BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getNFT",
+    values: [BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "interfaceImplementer",
@@ -103,6 +109,10 @@ interface ResolverInterface extends ethers.utils.Interface {
     values: [BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "setNFT",
+    values: [BytesLike, BigNumberish, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setName",
     values: [BytesLike, string]
   ): string;
@@ -132,6 +142,7 @@ interface ResolverInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "dnsRecord", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getNFT", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "interfaceImplementer",
     data: BytesLike
@@ -156,6 +167,7 @@ interface ResolverInterface extends ethers.utils.Interface {
     functionFragment: "setMultihash",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setName", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setPubkey", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setText", data: BytesLike): Result;
@@ -177,6 +189,7 @@ interface ResolverInterface extends ethers.utils.Interface {
     "DNSZoneCleared(bytes32)": EventFragment;
     "DNSZonehashChanged(bytes32,bytes,bytes)": EventFragment;
     "InterfaceChanged(bytes32,bytes4,address)": EventFragment;
+    "NFTChanged(bytes32,uint256,address,uint256)": EventFragment;
     "NameChanged(bytes32,string)": EventFragment;
     "PubkeyChanged(bytes32,bytes32,bytes32)": EventFragment;
     "TextChanged(bytes32,string,string)": EventFragment;
@@ -192,6 +205,7 @@ interface ResolverInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "DNSZoneCleared"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "DNSZonehashChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "InterfaceChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "NFTChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NameChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PubkeyChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TextChanged"): EventFragment;
@@ -249,6 +263,15 @@ export type InterfaceChangedEvent = TypedEvent<
     node: string;
     interfaceID: string;
     implementer: string;
+  }
+>;
+
+export type NFTChangedEvent = TypedEvent<
+  [string, BigNumber, string, BigNumber] & {
+    node: string;
+    chainId: BigNumber;
+    contractAddress: string;
+    tokenId: BigNumber;
   }
 >;
 
@@ -336,6 +359,12 @@ export class Resolver extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    getNFT(
+      node: BytesLike,
+      chainID: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     interfaceImplementer(
       node: BytesLike,
       interfaceID: BytesLike,
@@ -407,6 +436,14 @@ export class Resolver extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setNFT(
+      node: BytesLike,
+      chainId: BigNumberish,
+      contractAddress: string,
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setName(
       node: BytesLike,
       _name: string,
@@ -465,6 +502,12 @@ export class Resolver extends BaseContract {
     resource: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getNFT(
+    node: BytesLike,
+    chainID: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   interfaceImplementer(
     node: BytesLike,
@@ -537,6 +580,14 @@ export class Resolver extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setNFT(
+    node: BytesLike,
+    chainId: BigNumberish,
+    contractAddress: string,
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setName(
     node: BytesLike,
     _name: string,
@@ -598,6 +649,18 @@ export class Resolver extends BaseContract {
       resource: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getNFT(
+      node: BytesLike,
+      chainID: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, string, BigNumber] & {
+        chainId: BigNumber;
+        contractAddress: string;
+        tokenId: BigNumber;
+      }
+    >;
 
     interfaceImplementer(
       node: BytesLike,
@@ -664,6 +727,14 @@ export class Resolver extends BaseContract {
     setMultihash(
       node: BytesLike,
       hash: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setNFT(
+      node: BytesLike,
+      chainId: BigNumberish,
+      contractAddress: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -848,6 +919,36 @@ export class Resolver extends BaseContract {
       { node: string; interfaceID: string; implementer: string }
     >;
 
+    "NFTChanged(bytes32,uint256,address,uint256)"(
+      node?: BytesLike | null,
+      chainId?: null,
+      contractAddress?: null,
+      tokenId?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, BigNumber],
+      {
+        node: string;
+        chainId: BigNumber;
+        contractAddress: string;
+        tokenId: BigNumber;
+      }
+    >;
+
+    NFTChanged(
+      node?: BytesLike | null,
+      chainId?: null,
+      contractAddress?: null,
+      tokenId?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, BigNumber],
+      {
+        node: string;
+        chainId: BigNumber;
+        contractAddress: string;
+        tokenId: BigNumber;
+      }
+    >;
+
     "NameChanged(bytes32,string)"(
       node?: BytesLike | null,
       name?: null
@@ -924,6 +1025,12 @@ export class Resolver extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getNFT(
+      node: BytesLike,
+      chainID: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     interfaceImplementer(
       node: BytesLike,
       interfaceID: BytesLike,
@@ -989,6 +1096,14 @@ export class Resolver extends BaseContract {
     setMultihash(
       node: BytesLike,
       hash: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setNFT(
+      node: BytesLike,
+      chainId: BigNumberish,
+      contractAddress: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1059,6 +1174,12 @@ export class Resolver extends BaseContract {
       name: BytesLike,
       resource: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getNFT(
+      node: BytesLike,
+      chainID: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     interfaceImplementer(
@@ -1135,6 +1256,14 @@ export class Resolver extends BaseContract {
     setMultihash(
       node: BytesLike,
       hash: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setNFT(
+      node: BytesLike,
+      chainId: BigNumberish,
+      contractAddress: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

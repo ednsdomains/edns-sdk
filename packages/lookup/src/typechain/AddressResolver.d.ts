@@ -23,9 +23,12 @@ interface AddressResolverInterface extends ethers.utils.Interface {
   functions: {
     "MAX_LABEL_LENGTH()": FunctionFragment;
     "MIN_LABEL_LENGTH()": FunctionFragment;
-    "addr(bytes,bytes,bytes,uint256)": FunctionFragment;
-    "setAddr(bytes,bytes,bytes,uint256,bytes)": FunctionFragment;
-    "setAddr_SYNC(bytes,bytes,bytes,uint256,bytes)": FunctionFragment;
+    "getAddress(bytes,bytes,bytes)": FunctionFragment;
+    "getReverseAddress(address)": FunctionFragment;
+    "setAddress(bytes,bytes,bytes,address)": FunctionFragment;
+    "setAddress_SYNC(bytes,bytes,bytes,address)": FunctionFragment;
+    "setReverseAddress(bytes,bytes,bytes,address)": FunctionFragment;
+    "setReverseAddress_SYNC(bytes,bytes,bytes,address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "valid(string,string,string)": FunctionFragment;
   };
@@ -39,16 +42,28 @@ interface AddressResolverInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "addr",
-    values: [BytesLike, BytesLike, BytesLike, BigNumberish]
+    functionFragment: "getAddress",
+    values: [BytesLike, BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "setAddr",
-    values: [BytesLike, BytesLike, BytesLike, BigNumberish, BytesLike]
+    functionFragment: "getReverseAddress",
+    values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "setAddr_SYNC",
-    values: [BytesLike, BytesLike, BytesLike, BigNumberish, BytesLike]
+    functionFragment: "setAddress",
+    values: [BytesLike, BytesLike, BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setAddress_SYNC",
+    values: [BytesLike, BytesLike, BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setReverseAddress",
+    values: [BytesLike, BytesLike, BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setReverseAddress_SYNC",
+    values: [BytesLike, BytesLike, BytesLike, string]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -67,10 +82,22 @@ interface AddressResolverInterface extends ethers.utils.Interface {
     functionFragment: "MIN_LABEL_LENGTH",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "addr", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setAddr", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getAddress", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setAddr_SYNC",
+    functionFragment: "getReverseAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setAddress", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setAddress_SYNC",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setReverseAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setReverseAddress_SYNC",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -80,18 +107,28 @@ interface AddressResolverInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "valid", data: BytesLike): Result;
 
   events: {
-    "SetAddress(bytes,bytes,bytes,uint256,bytes)": EventFragment;
+    "SetAddress(bytes,bytes,bytes,address)": EventFragment;
+    "SetReverseAddress(bytes,bytes,bytes,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "SetAddress"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetReverseAddress"): EventFragment;
 }
 
 export type SetAddressEvent = TypedEvent<
-  [string, string, string, BigNumber, string] & {
+  [string, string, string, string] & {
     host: string;
-    domain: string;
+    name: string;
     tld: string;
-    coin: BigNumber;
+    address_: string;
+  }
+>;
+
+export type SetReverseAddressEvent = TypedEvent<
+  [string, string, string, string] & {
+    host: string;
+    name: string;
+    tld: string;
     address_: string;
   }
 >;
@@ -144,48 +181,47 @@ export class AddressResolver extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    "addr(bytes,bytes,bytes,uint256)"(
+    getAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    "addr(bytes,uint256)"(
-      fqdn_: BytesLike,
-      coin: BigNumberish,
+    getReverseAddress(
+      address_: string,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    "addr(bytes,bytes,uint256)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    "addr(bytes32,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    setAddr(
+    setAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setAddr_SYNC(
+    setAddress_SYNC(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setReverseAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setReverseAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -202,13 +238,13 @@ export class AddressResolver extends BaseContract {
     ): Promise<[boolean]>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
@@ -225,48 +261,47 @@ export class AddressResolver extends BaseContract {
 
   MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
-  "addr(bytes,bytes,bytes,uint256)"(
+  getAddress(
     host: BytesLike,
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
-    coin: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
 
-  "addr(bytes,uint256)"(
-    fqdn_: BytesLike,
-    coin: BigNumberish,
+  getReverseAddress(
+    address_: string,
     overrides?: CallOverrides
   ): Promise<string>;
 
-  "addr(bytes,bytes,uint256)"(
-    domain: BytesLike,
-    tld: BytesLike,
-    coin: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  "addr(bytes32,uint256)"(
-    fqdn: BytesLike,
-    coin: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  setAddr(
+  setAddress(
     host: BytesLike,
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
-    coin: BigNumberish,
-    address_: BytesLike,
+    address_: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setAddr_SYNC(
+  setAddress_SYNC(
     host: BytesLike,
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
-    coin: BigNumberish,
-    address_: BytesLike,
+    address_: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setReverseAddress(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    address_: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setReverseAddress_SYNC(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    address_: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -283,13 +318,13 @@ export class AddressResolver extends BaseContract {
   ): Promise<boolean>;
 
   "valid(string,string)"(
-    domain: string,
+    name: string,
     arg1: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   "valid(bytes,bytes)"(
-    domain: BytesLike,
+    name: BytesLike,
     arg1: BytesLike,
     overrides?: CallOverrides
   ): Promise<boolean>;
@@ -306,48 +341,47 @@ export class AddressResolver extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "addr(bytes,bytes,bytes,uint256)"(
+    getAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    "addr(bytes,uint256)"(
-      fqdn_: BytesLike,
-      coin: BigNumberish,
+    getReverseAddress(
+      address_: string,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    "addr(bytes,bytes,uint256)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    "addr(bytes32,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    setAddr(
+    setAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setAddr_SYNC(
+    setAddress_SYNC(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setReverseAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setReverseAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -364,13 +398,13 @@ export class AddressResolver extends BaseContract {
     ): Promise<boolean>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -384,38 +418,44 @@ export class AddressResolver extends BaseContract {
   };
 
   filters: {
-    "SetAddress(bytes,bytes,bytes,uint256,bytes)"(
+    "SetAddress(bytes,bytes,bytes,address)"(
       host?: null,
-      domain?: null,
+      name?: null,
       tld?: null,
-      coin?: null,
       address_?: null
     ): TypedEventFilter<
-      [string, string, string, BigNumber, string],
-      {
-        host: string;
-        domain: string;
-        tld: string;
-        coin: BigNumber;
-        address_: string;
-      }
+      [string, string, string, string],
+      { host: string; name: string; tld: string; address_: string }
     >;
 
     SetAddress(
       host?: null,
-      domain?: null,
+      name?: null,
       tld?: null,
-      coin?: null,
       address_?: null
     ): TypedEventFilter<
-      [string, string, string, BigNumber, string],
-      {
-        host: string;
-        domain: string;
-        tld: string;
-        coin: BigNumber;
-        address_: string;
-      }
+      [string, string, string, string],
+      { host: string; name: string; tld: string; address_: string }
+    >;
+
+    "SetReverseAddress(bytes,bytes,bytes,address)"(
+      host?: null,
+      name?: null,
+      tld?: null,
+      address_?: null
+    ): TypedEventFilter<
+      [string, string, string, string],
+      { host: string; name: string; tld: string; address_: string }
+    >;
+
+    SetReverseAddress(
+      host?: null,
+      name?: null,
+      tld?: null,
+      address_?: null
+    ): TypedEventFilter<
+      [string, string, string, string],
+      { host: string; name: string; tld: string; address_: string }
     >;
   };
 
@@ -424,48 +464,47 @@ export class AddressResolver extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "addr(bytes,bytes,bytes,uint256)"(
+    getAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "addr(bytes,uint256)"(
-      fqdn_: BytesLike,
-      coin: BigNumberish,
+    getReverseAddress(
+      address_: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    "addr(bytes,bytes,uint256)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "addr(bytes32,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    setAddr(
+    setAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setAddr_SYNC(
+    setAddress_SYNC(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setReverseAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setReverseAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -482,13 +521,13 @@ export class AddressResolver extends BaseContract {
     ): Promise<BigNumber>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -506,48 +545,47 @@ export class AddressResolver extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "addr(bytes,bytes,bytes,uint256)"(
+    getAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "addr(bytes,uint256)"(
-      fqdn_: BytesLike,
-      coin: BigNumberish,
+    getReverseAddress(
+      address_: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "addr(bytes,bytes,uint256)"(
-      domain: BytesLike,
-      tld: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "addr(bytes32,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    setAddr(
+    setAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setAddr_SYNC(
+    setAddress_SYNC(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setReverseAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setReverseAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -564,13 +602,13 @@ export class AddressResolver extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

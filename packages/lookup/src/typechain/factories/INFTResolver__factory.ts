@@ -11,28 +11,10 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: "bytes",
-        name: "fqdn",
-        type: "bytes",
-      },
-      {
-        indexed: false,
-        internalType: "bytes",
-        name: "host",
-        type: "bytes",
-      },
-      {
-        indexed: false,
-        internalType: "bytes",
-        name: "domain",
-        type: "bytes",
-      },
-      {
-        indexed: false,
-        internalType: "bytes",
-        name: "tld",
-        type: "bytes",
+        indexed: true,
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
       },
       {
         indexed: false,
@@ -53,29 +35,34 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "SetNFT",
+    name: "NFTChanged",
     type: "event",
   },
   {
     inputs: [
       {
         internalType: "bytes32",
-        name: "fqdn",
+        name: "node",
         type: "bytes32",
       },
       {
         internalType: "uint256",
-        name: "chainId",
+        name: "chainID",
         type: "uint256",
       },
     ],
-    name: "nft",
+    name: "getNFT",
     outputs: [
       {
         components: [
           {
+            internalType: "uint256",
+            name: "chainId",
+            type: "uint256",
+          },
+          {
             internalType: "address",
-            name: "contract_",
+            name: "contractAddress",
             type: "address",
           },
           {
@@ -89,107 +76,15 @@ const _abi = [
         type: "tuple",
       },
     ],
-    stateMutability: "view",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [
       {
-        internalType: "bytes",
-        name: "host",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "domain",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "tld",
-        type: "bytes",
-      },
-      {
-        internalType: "uint256",
-        name: "chainId",
-        type: "uint256",
-      },
-    ],
-    name: "nft",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "contract_",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct INFTResolver.NFT",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "fqdn",
-        type: "bytes",
-      },
-      {
-        internalType: "uint256",
-        name: "chainId",
-        type: "uint256",
-      },
-    ],
-    name: "nft",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "contract_",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct INFTResolver.NFT",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "host",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "domain",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "tld",
-        type: "bytes",
+        internalType: "bytes32",
+        name: "node",
+        type: "bytes32",
       },
       {
         internalType: "uint256",
@@ -198,7 +93,7 @@ const _abi = [
       },
       {
         internalType: "address",
-        name: "contract_",
+        name: "contractAddress",
         type: "address",
       },
       {
@@ -208,44 +103,6 @@ const _abi = [
       },
     ],
     name: "setNFT",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes",
-        name: "host",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "domain",
-        type: "bytes",
-      },
-      {
-        internalType: "bytes",
-        name: "tld",
-        type: "bytes",
-      },
-      {
-        internalType: "uint256",
-        name: "chainId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "contract_",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "setNFT_SYNC",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

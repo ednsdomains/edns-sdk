@@ -21,29 +21,36 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface IPublicResolverInterface extends ethers.utils.Interface {
   functions: {
-    "addr(bytes,bytes,bytes,uint256)": FunctionFragment;
-    "nft(bytes32,uint256)": FunctionFragment;
-    "setAddr(bytes,bytes,bytes,uint256,bytes)": FunctionFragment;
-    "setAddr_SYNC(bytes,bytes,bytes,uint256,bytes)": FunctionFragment;
+    "getAddress(bytes,bytes,bytes)": FunctionFragment;
+    "getNFT(bytes32,uint256)": FunctionFragment;
+    "getReverseAddress(address)": FunctionFragment;
+    "setAddress(bytes,bytes,bytes,address)": FunctionFragment;
+    "setAddress_SYNC(bytes,bytes,bytes,address)": FunctionFragment;
     "setNFT(bytes,bytes,bytes,uint256,address,uint256)": FunctionFragment;
     "setNFT_SYNC(bytes,bytes,bytes,uint256,address,uint256)": FunctionFragment;
+    "setReverseAddress(bytes,bytes,bytes,address)": FunctionFragment;
+    "setReverseAddress_SYNC(bytes,bytes,bytes,address)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "addr",
-    values: [BytesLike, BytesLike, BytesLike, BigNumberish]
+    functionFragment: "getAddress",
+    values: [BytesLike, BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "nft",
+    functionFragment: "getNFT",
     values: [BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "setAddr",
-    values: [BytesLike, BytesLike, BytesLike, BigNumberish, BytesLike]
+    functionFragment: "getReverseAddress",
+    values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "setAddr_SYNC",
-    values: [BytesLike, BytesLike, BytesLike, BigNumberish, BytesLike]
+    functionFragment: "setAddress",
+    values: [BytesLike, BytesLike, BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setAddress_SYNC",
+    values: [BytesLike, BytesLike, BytesLike, string]
   ): string;
   encodeFunctionData(
     functionFragment: "setNFT",
@@ -67,12 +74,24 @@ interface IPublicResolverInterface extends ethers.utils.Interface {
       BigNumberish
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setReverseAddress",
+    values: [BytesLike, BytesLike, BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setReverseAddress_SYNC",
+    values: [BytesLike, BytesLike, BytesLike, string]
+  ): string;
 
-  decodeFunctionResult(functionFragment: "addr", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "nft", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setAddr", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getAddress", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getNFT", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setAddr_SYNC",
+    functionFragment: "getReverseAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setAddress", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setAddress_SYNC",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setNFT", data: BytesLike): Result;
@@ -80,35 +99,52 @@ interface IPublicResolverInterface extends ethers.utils.Interface {
     functionFragment: "setNFT_SYNC",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setReverseAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setReverseAddress_SYNC",
+    data: BytesLike
+  ): Result;
 
   events: {
-    "SetAddress(bytes,bytes,bytes,uint256,bytes)": EventFragment;
-    "SetNFT(bytes,bytes,bytes,bytes,uint256,address,uint256)": EventFragment;
+    "SetAddress(bytes,bytes,bytes,address)": EventFragment;
+    "SetNFT(bytes,bytes,bytes,uint256,address,uint256)": EventFragment;
+    "SetReverseAddress(bytes,bytes,bytes,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "SetAddress"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SetNFT"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SetReverseAddress"): EventFragment;
 }
 
 export type SetAddressEvent = TypedEvent<
-  [string, string, string, BigNumber, string] & {
+  [string, string, string, string] & {
     host: string;
-    domain: string;
+    name: string;
     tld: string;
-    coin: BigNumber;
     address_: string;
   }
 >;
 
 export type SetNFTEvent = TypedEvent<
-  [string, string, string, string, BigNumber, string, BigNumber] & {
-    fqdn: string;
+  [string, string, string, BigNumber, string, BigNumber] & {
     host: string;
-    domain: string;
+    name: string;
     tld: string;
     chainId: BigNumber;
     contractAddress: string;
     tokenId: BigNumber;
+  }
+>;
+
+export type SetReverseAddressEvent = TypedEvent<
+  [string, string, string, string] & {
+    host: string;
+    name: string;
+    tld: string;
+    address_: string;
   }
 >;
 
@@ -156,73 +192,45 @@ export class IPublicResolver extends BaseContract {
   interface: IPublicResolverInterface;
 
   functions: {
-    "addr(bytes,bytes,bytes,uint256)"(
+    getAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    "addr(bytes,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    "addr(bytes32,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    "nft(bytes32,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [[string, BigNumber] & { contract_: string; tokenId: BigNumber }]
-    >;
-
-    "nft(bytes,bytes,bytes,uint256)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [[string, BigNumber] & { contract_: string; tokenId: BigNumber }]
-    >;
-
-    "nft(bytes,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [[string, BigNumber] & { contract_: string; tokenId: BigNumber }]
-    >;
-
-    setAddr(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setAddr_SYNC(
+    getNFT(
+      fqdn: BytesLike,
+      chainId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [[string, BigNumber] & { contract_: string; tokenId: BigNumber }]
+    >;
+
+    getReverseAddress(
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setNFT(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       chainId: BigNumberish,
       contract_: string,
@@ -232,76 +240,68 @@ export class IPublicResolver extends BaseContract {
 
     setNFT_SYNC(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       chainId: BigNumberish,
       contract_: string,
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    setReverseAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setReverseAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
-  "addr(bytes,bytes,bytes,uint256)"(
+  getAddress(
     host: BytesLike,
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
-    coin: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  "addr(bytes,uint256)"(
-    fqdn: BytesLike,
-    coin: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  "addr(bytes32,uint256)"(
-    fqdn: BytesLike,
-    coin: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  "nft(bytes32,uint256)"(
-    fqdn: BytesLike,
-    chainId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
-
-  "nft(bytes,bytes,bytes,uint256)"(
-    host: BytesLike,
-    domain: BytesLike,
-    tld: BytesLike,
-    chainId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
-
-  "nft(bytes,uint256)"(
-    fqdn: BytesLike,
-    chainId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
-
-  setAddr(
-    host: BytesLike,
-    domain: BytesLike,
-    tld: BytesLike,
-    coin: BigNumberish,
-    address_: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setAddr_SYNC(
+  getNFT(
+    fqdn: BytesLike,
+    chainId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
+
+  getReverseAddress(
+    address_: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setAddress(
     host: BytesLike,
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
-    coin: BigNumberish,
-    address_: BytesLike,
+    address_: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setAddress_SYNC(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    address_: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setNFT(
     host: BytesLike,
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
     chainId: BigNumberish,
     contract_: string,
@@ -311,7 +311,7 @@ export class IPublicResolver extends BaseContract {
 
   setNFT_SYNC(
     host: BytesLike,
-    domain: BytesLike,
+    name: BytesLike,
     tld: BytesLike,
     chainId: BigNumberish,
     contract_: string,
@@ -319,68 +319,60 @@ export class IPublicResolver extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setReverseAddress(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    address_: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setReverseAddress_SYNC(
+    host: BytesLike,
+    name: BytesLike,
+    tld: BytesLike,
+    address_: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
-    "addr(bytes,bytes,bytes,uint256)"(
+    getAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    "addr(bytes,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    "addr(bytes32,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    "nft(bytes32,uint256)"(
+    getNFT(
       fqdn: BytesLike,
       chainId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
 
-    "nft(bytes,bytes,bytes,uint256)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
+    getReverseAddress(
+      address_: string,
       overrides?: CallOverrides
-    ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
+    ): Promise<string>;
 
-    "nft(bytes,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string, BigNumber] & { contract_: string; tokenId: BigNumber }>;
-
-    setAddr(
+    setAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setAddr_SYNC(
+    setAddress_SYNC(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setNFT(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       chainId: BigNumberish,
       contract_: string,
@@ -390,64 +382,64 @@ export class IPublicResolver extends BaseContract {
 
     setNFT_SYNC(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       chainId: BigNumberish,
       contract_: string,
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setReverseAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setReverseAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
-    "SetAddress(bytes,bytes,bytes,uint256,bytes)"(
+    "SetAddress(bytes,bytes,bytes,address)"(
       host?: null,
-      domain?: null,
+      name?: null,
       tld?: null,
-      coin?: null,
       address_?: null
     ): TypedEventFilter<
-      [string, string, string, BigNumber, string],
-      {
-        host: string;
-        domain: string;
-        tld: string;
-        coin: BigNumber;
-        address_: string;
-      }
+      [string, string, string, string],
+      { host: string; name: string; tld: string; address_: string }
     >;
 
     SetAddress(
       host?: null,
-      domain?: null,
+      name?: null,
       tld?: null,
-      coin?: null,
       address_?: null
     ): TypedEventFilter<
-      [string, string, string, BigNumber, string],
-      {
-        host: string;
-        domain: string;
-        tld: string;
-        coin: BigNumber;
-        address_: string;
-      }
+      [string, string, string, string],
+      { host: string; name: string; tld: string; address_: string }
     >;
 
-    "SetNFT(bytes,bytes,bytes,bytes,uint256,address,uint256)"(
-      fqdn?: null,
+    "SetNFT(bytes,bytes,bytes,uint256,address,uint256)"(
       host?: null,
-      domain?: null,
+      name?: null,
       tld?: null,
       chainId?: null,
       contractAddress?: null,
       tokenId?: null
     ): TypedEventFilter<
-      [string, string, string, string, BigNumber, string, BigNumber],
+      [string, string, string, BigNumber, string, BigNumber],
       {
-        fqdn: string;
         host: string;
-        domain: string;
+        name: string;
         tld: string;
         chainId: BigNumber;
         contractAddress: string;
@@ -456,89 +448,83 @@ export class IPublicResolver extends BaseContract {
     >;
 
     SetNFT(
-      fqdn?: null,
       host?: null,
-      domain?: null,
+      name?: null,
       tld?: null,
       chainId?: null,
       contractAddress?: null,
       tokenId?: null
     ): TypedEventFilter<
-      [string, string, string, string, BigNumber, string, BigNumber],
+      [string, string, string, BigNumber, string, BigNumber],
       {
-        fqdn: string;
         host: string;
-        domain: string;
+        name: string;
         tld: string;
         chainId: BigNumber;
         contractAddress: string;
         tokenId: BigNumber;
       }
     >;
+
+    "SetReverseAddress(bytes,bytes,bytes,address)"(
+      host?: null,
+      name?: null,
+      tld?: null,
+      address_?: null
+    ): TypedEventFilter<
+      [string, string, string, string],
+      { host: string; name: string; tld: string; address_: string }
+    >;
+
+    SetReverseAddress(
+      host?: null,
+      name?: null,
+      tld?: null,
+      address_?: null
+    ): TypedEventFilter<
+      [string, string, string, string],
+      { host: string; name: string; tld: string; address_: string }
+    >;
   };
 
   estimateGas: {
-    "addr(bytes,bytes,bytes,uint256)"(
+    getAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "addr(bytes,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "addr(bytes32,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "nft(bytes32,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "nft(bytes,bytes,bytes,uint256)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "nft(bytes,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    setAddr(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setAddr_SYNC(
+    getNFT(
+      fqdn: BytesLike,
+      chainId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getReverseAddress(
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setNFT(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       chainId: BigNumberish,
       contract_: string,
@@ -548,77 +534,69 @@ export class IPublicResolver extends BaseContract {
 
     setNFT_SYNC(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       chainId: BigNumberish,
       contract_: string,
       tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setReverseAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setReverseAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    "addr(bytes,bytes,bytes,uint256)"(
+    getAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "addr(bytes,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "addr(bytes32,uint256)"(
-      fqdn: BytesLike,
-      coin: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "nft(bytes32,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "nft(bytes,bytes,bytes,uint256)"(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "nft(bytes,uint256)"(
-      fqdn: BytesLike,
-      chainId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    setAddr(
-      host: BytesLike,
-      domain: BytesLike,
-      tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setAddr_SYNC(
+    getNFT(
+      fqdn: BytesLike,
+      chainId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getReverseAddress(
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setAddress(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
-      coin: BigNumberish,
-      address_: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setNFT(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       chainId: BigNumberish,
       contract_: string,
@@ -628,11 +606,27 @@ export class IPublicResolver extends BaseContract {
 
     setNFT_SYNC(
       host: BytesLike,
-      domain: BytesLike,
+      name: BytesLike,
       tld: BytesLike,
       chainId: BigNumberish,
       contract_: string,
       tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setReverseAddress(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setReverseAddress_SYNC(
+      host: BytesLike,
+      name: BytesLike,
+      tld: BytesLike,
+      address_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

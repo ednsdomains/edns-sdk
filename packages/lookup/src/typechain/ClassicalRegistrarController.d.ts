@@ -19,22 +19,20 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
-interface OmniRegistrarControllerInterface extends ethers.utils.Interface {
+interface ClassicalRegistrarControllerInterface extends ethers.utils.Interface {
   functions: {
     "ADMIN_ROLE()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "MAX_LABEL_LENGTH()": FunctionFragment;
     "MIN_LABEL_LENGTH()": FunctionFragment;
-    "available(string,string)": FunctionFragment;
-    "commit(string,string,address,uint256)": FunctionFragment;
+    "getPrice(bytes,bytes,uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(address,address,address,address,uint256[])": FunctionFragment;
-    "makeCommitment(string,string,address,uint256)": FunctionFragment;
-    "price(string,string,uint256)": FunctionFragment;
-    "register(string,string,address,uint256,bytes32)": FunctionFragment;
-    "renew(string,string,uint256)": FunctionFragment;
+    "initialize(address,address,address,address,uint256)": FunctionFragment;
+    "isAvailable(bytes,bytes)": FunctionFragment;
+    "register(bytes,bytes,address,uint64)": FunctionFragment;
+    "renew(bytes,bytes,uint64)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -58,12 +56,8 @@ interface OmniRegistrarControllerInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "available",
-    values: [string, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "commit",
-    values: [string, string, string, BigNumberish]
+    functionFragment: "getPrice",
+    values: [BytesLike, BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
@@ -79,23 +73,19 @@ interface OmniRegistrarControllerInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, string, string, BigNumberish[]]
+    values: [string, string, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "makeCommitment",
-    values: [string, string, string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "price",
-    values: [string, string, BigNumberish]
+    functionFragment: "isAvailable",
+    values: [BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "register",
-    values: [string, string, string, BigNumberish, BytesLike]
+    values: [BytesLike, BytesLike, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renew",
-    values: [string, string, BigNumberish]
+    values: [BytesLike, BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
@@ -127,8 +117,7 @@ interface OmniRegistrarControllerInterface extends ethers.utils.Interface {
     functionFragment: "MIN_LABEL_LENGTH",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "available", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "commit", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
     data: BytesLike
@@ -137,10 +126,9 @@ interface OmniRegistrarControllerInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "makeCommitment",
+    functionFragment: "isAvailable",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "register", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "renew", data: BytesLike): Result;
   decodeFunctionResult(
@@ -181,7 +169,7 @@ export type RoleRevokedEvent = TypedEvent<
   [string, string, string] & { role: string; account: string; sender: string }
 >;
 
-export class OmniRegistrarController extends BaseContract {
+export class ClassicalRegistrarController extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -222,7 +210,7 @@ export class OmniRegistrarController extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: OmniRegistrarControllerInterface;
+  interface: ClassicalRegistrarControllerInterface;
 
   functions: {
     ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
@@ -233,24 +221,12 @@ export class OmniRegistrarController extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    "available(string,string)"(
-      domain: string,
-      tld: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    "available(string)"(
-      tld: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    commit(
-      domain: string,
-      tld: string,
-      owner: string,
+    getPrice(
+      name: BytesLike,
+      tld: BytesLike,
       durations: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
@@ -271,38 +247,33 @@ export class OmniRegistrarController extends BaseContract {
       domainPrice_: string,
       tokenPrice_: string,
       registrar_: string,
-      coinIds: BigNumberish[],
+      coinId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    makeCommitment(
-      domain: string,
-      tld: string,
-      owner: string,
-      durations: BigNumberish,
+    "isAvailable(bytes,bytes)"(
+      name: BytesLike,
+      tld: BytesLike,
       overrides?: CallOverrides
-    ): Promise<[string]>;
+    ): Promise<[boolean]>;
 
-    price(
-      domain: string,
-      tld: string,
-      durations: BigNumberish,
+    "isAvailable(bytes)"(
+      tld: BytesLike,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[boolean]>;
 
     register(
-      domain: string,
-      tld: string,
+      name: BytesLike,
+      tld: BytesLike,
       owner: string,
-      durations: BigNumberish,
-      commitment: BytesLike,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     renew(
-      domain: string,
-      tld: string,
-      durations: BigNumberish,
+      name: BytesLike,
+      tld: BytesLike,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -331,13 +302,13 @@ export class OmniRegistrarController extends BaseContract {
     ): Promise<[boolean]>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
@@ -358,21 +329,12 @@ export class OmniRegistrarController extends BaseContract {
 
   MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
-  "available(string,string)"(
-    domain: string,
-    tld: string,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  "available(string)"(tld: string, overrides?: CallOverrides): Promise<boolean>;
-
-  commit(
-    domain: string,
-    tld: string,
-    owner: string,
+  getPrice(
+    name: BytesLike,
+    tld: BytesLike,
     durations: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
@@ -393,38 +355,33 @@ export class OmniRegistrarController extends BaseContract {
     domainPrice_: string,
     tokenPrice_: string,
     registrar_: string,
-    coinIds: BigNumberish[],
+    coinId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  makeCommitment(
-    domain: string,
-    tld: string,
-    owner: string,
-    durations: BigNumberish,
+  "isAvailable(bytes,bytes)"(
+    name: BytesLike,
+    tld: BytesLike,
     overrides?: CallOverrides
-  ): Promise<string>;
+  ): Promise<boolean>;
 
-  price(
-    domain: string,
-    tld: string,
-    durations: BigNumberish,
+  "isAvailable(bytes)"(
+    tld: BytesLike,
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<boolean>;
 
   register(
-    domain: string,
-    tld: string,
+    name: BytesLike,
+    tld: BytesLike,
     owner: string,
-    durations: BigNumberish,
-    commitment: BytesLike,
+    expires: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   renew(
-    domain: string,
-    tld: string,
-    durations: BigNumberish,
+    name: BytesLike,
+    tld: BytesLike,
+    expires: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -453,13 +410,13 @@ export class OmniRegistrarController extends BaseContract {
   ): Promise<boolean>;
 
   "valid(string,string)"(
-    domain: string,
+    name: string,
     arg1: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   "valid(bytes,bytes)"(
-    domain: BytesLike,
+    name: BytesLike,
     arg1: BytesLike,
     overrides?: CallOverrides
   ): Promise<boolean>;
@@ -480,24 +437,12 @@ export class OmniRegistrarController extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "available(string,string)"(
-      domain: string,
-      tld: string,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "available(string)"(
-      tld: string,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    commit(
-      domain: string,
-      tld: string,
-      owner: string,
+    getPrice(
+      name: BytesLike,
+      tld: BytesLike,
       durations: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
@@ -518,38 +463,33 @@ export class OmniRegistrarController extends BaseContract {
       domainPrice_: string,
       tokenPrice_: string,
       registrar_: string,
-      coinIds: BigNumberish[],
+      coinId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    makeCommitment(
-      domain: string,
-      tld: string,
-      owner: string,
-      durations: BigNumberish,
+    "isAvailable(bytes,bytes)"(
+      name: BytesLike,
+      tld: BytesLike,
       overrides?: CallOverrides
-    ): Promise<string>;
+    ): Promise<boolean>;
 
-    price(
-      domain: string,
-      tld: string,
-      durations: BigNumberish,
+    "isAvailable(bytes)"(
+      tld: BytesLike,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<boolean>;
 
     register(
-      domain: string,
-      tld: string,
+      name: BytesLike,
+      tld: BytesLike,
       owner: string,
-      durations: BigNumberish,
-      commitment: BytesLike,
+      expires: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     renew(
-      domain: string,
-      tld: string,
-      durations: BigNumberish,
+      name: BytesLike,
+      tld: BytesLike,
+      expires: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -578,13 +518,13 @@ export class OmniRegistrarController extends BaseContract {
     ): Promise<boolean>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -662,23 +602,11 @@ export class OmniRegistrarController extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "available(string,string)"(
-      domain: string,
-      tld: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "available(string)"(
-      tld: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    commit(
-      domain: string,
-      tld: string,
-      owner: string,
+    getPrice(
+      name: BytesLike,
+      tld: BytesLike,
       durations: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getRoleAdmin(
@@ -703,38 +631,33 @@ export class OmniRegistrarController extends BaseContract {
       domainPrice_: string,
       tokenPrice_: string,
       registrar_: string,
-      coinIds: BigNumberish[],
+      coinId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    makeCommitment(
-      domain: string,
-      tld: string,
-      owner: string,
-      durations: BigNumberish,
+    "isAvailable(bytes,bytes)"(
+      name: BytesLike,
+      tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    price(
-      domain: string,
-      tld: string,
-      durations: BigNumberish,
+    "isAvailable(bytes)"(
+      tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     register(
-      domain: string,
-      tld: string,
+      name: BytesLike,
+      tld: BytesLike,
       owner: string,
-      durations: BigNumberish,
-      commitment: BytesLike,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     renew(
-      domain: string,
-      tld: string,
-      durations: BigNumberish,
+      name: BytesLike,
+      tld: BytesLike,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -763,13 +686,13 @@ export class OmniRegistrarController extends BaseContract {
     ): Promise<BigNumber>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -793,23 +716,11 @@ export class OmniRegistrarController extends BaseContract {
 
     MIN_LABEL_LENGTH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "available(string,string)"(
-      domain: string,
-      tld: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "available(string)"(
-      tld: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    commit(
-      domain: string,
-      tld: string,
-      owner: string,
+    getPrice(
+      name: BytesLike,
+      tld: BytesLike,
       durations: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getRoleAdmin(
@@ -834,38 +745,33 @@ export class OmniRegistrarController extends BaseContract {
       domainPrice_: string,
       tokenPrice_: string,
       registrar_: string,
-      coinIds: BigNumberish[],
+      coinId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    makeCommitment(
-      domain: string,
-      tld: string,
-      owner: string,
-      durations: BigNumberish,
+    "isAvailable(bytes,bytes)"(
+      name: BytesLike,
+      tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    price(
-      domain: string,
-      tld: string,
-      durations: BigNumberish,
+    "isAvailable(bytes)"(
+      tld: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     register(
-      domain: string,
-      tld: string,
+      name: BytesLike,
+      tld: BytesLike,
       owner: string,
-      durations: BigNumberish,
-      commitment: BytesLike,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     renew(
-      domain: string,
-      tld: string,
-      durations: BigNumberish,
+      name: BytesLike,
+      tld: BytesLike,
+      expires: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -894,13 +800,13 @@ export class OmniRegistrarController extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     "valid(string,string)"(
-      domain: string,
+      name: string,
       arg1: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     "valid(bytes,bytes)"(
-      domain: BytesLike,
+      name: BytesLike,
       arg1: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

@@ -5,9 +5,9 @@
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
 import type {
-  IPhoneNumberResolver,
-  IPhoneNumberResolverInterface,
-} from "../IPhoneNumberResolver";
+  IMultiCoinAddressResolver,
+  IMultiCoinAddressResolverInterface,
+} from "../IMultiCoinAddressResolver";
 
 const _abi = [
   {
@@ -16,19 +16,13 @@ const _abi = [
       {
         indexed: false,
         internalType: "bytes",
-        name: "fqdn",
-        type: "bytes",
-      },
-      {
-        indexed: false,
-        internalType: "bytes",
         name: "host",
         type: "bytes",
       },
       {
         indexed: false,
         internalType: "bytes",
-        name: "domain",
+        name: "name",
         type: "bytes",
       },
       {
@@ -39,39 +33,44 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "bytes",
-        name: "payload",
-        type: "bytes",
+        internalType: "uint256",
+        name: "coin",
+        type: "uint256",
       },
       {
         indexed: false,
         internalType: "bytes",
-        name: "signature",
+        name: "address_",
         type: "bytes",
       },
     ],
-    name: "SetPhoneNumber",
+    name: "SetMultiCoinAddress",
     type: "event",
   },
   {
     inputs: [
       {
-        internalType: "string",
+        internalType: "bytes",
         name: "host",
-        type: "string",
+        type: "bytes",
       },
       {
-        internalType: "string",
-        name: "domain",
-        type: "string",
+        internalType: "bytes",
+        name: "name",
+        type: "bytes",
       },
       {
-        internalType: "string",
+        internalType: "bytes",
         name: "tld",
-        type: "string",
+        type: "bytes",
+      },
+      {
+        internalType: "uint256",
+        name: "coin",
+        type: "uint256",
       },
     ],
-    name: "phoneNumber",
+    name: "getMultiCoinAddress",
     outputs: [
       {
         internalType: "bytes",
@@ -85,89 +84,84 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "fqdn",
-        type: "string",
-      },
-    ],
-    name: "phoneNumber",
-    outputs: [
-      {
         internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "fqdn",
-        type: "bytes32",
-      },
-    ],
-    name: "phoneNumber",
-    outputs: [
-      {
-        internalType: "bytes",
-        name: "",
-        type: "bytes",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
         name: "host",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "domain",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "tld",
-        type: "string",
-      },
-      {
-        internalType: "bytes",
-        name: "payload",
         type: "bytes",
       },
       {
         internalType: "bytes",
-        name: "signature",
+        name: "name",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "tld",
+        type: "bytes",
+      },
+      {
+        internalType: "uint256",
+        name: "coin",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "address_",
         type: "bytes",
       },
     ],
-    name: "setPhoneNumber",
+    name: "setMultiCoinAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "host",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "name",
+        type: "bytes",
+      },
+      {
+        internalType: "bytes",
+        name: "tld",
+        type: "bytes",
+      },
+      {
+        internalType: "uint256",
+        name: "coin",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "address_",
+        type: "bytes",
+      },
+    ],
+    name: "setMultiCoinAddress_SYNC",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
 ];
 
-export class IPhoneNumberResolver__factory {
+export class IMultiCoinAddressResolver__factory {
   static readonly abi = _abi;
-  static createInterface(): IPhoneNumberResolverInterface {
-    return new utils.Interface(_abi) as IPhoneNumberResolverInterface;
+  static createInterface(): IMultiCoinAddressResolverInterface {
+    return new utils.Interface(_abi) as IMultiCoinAddressResolverInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): IPhoneNumberResolver {
+  ): IMultiCoinAddressResolver {
     return new Contract(
       address,
       _abi,
       signerOrProvider
-    ) as IPhoneNumberResolver;
+    ) as IMultiCoinAddressResolver;
   }
 }
