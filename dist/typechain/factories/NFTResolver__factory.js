@@ -10,28 +10,10 @@ const _abi = [
         anonymous: false,
         inputs: [
             {
-                indexed: false,
-                internalType: "bytes",
-                name: "fqdn",
-                type: "bytes",
-            },
-            {
-                indexed: false,
-                internalType: "bytes",
-                name: "host",
-                type: "bytes",
-            },
-            {
-                indexed: false,
-                internalType: "bytes",
-                name: "domain",
-                type: "bytes",
-            },
-            {
-                indexed: false,
-                internalType: "bytes",
-                name: "tld",
-                type: "bytes",
+                indexed: true,
+                internalType: "bytes32",
+                name: "node",
+                type: "bytes32",
             },
             {
                 indexed: false,
@@ -52,30 +34,45 @@ const _abi = [
                 type: "uint256",
             },
         ],
-        name: "SetNFT",
+        name: "NFTChanged",
         type: "event",
     },
     {
-        inputs: [],
-        name: "MAX_LABEL_LENGTH",
-        outputs: [
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "node",
+                type: "bytes32",
+            },
             {
                 internalType: "uint256",
-                name: "",
+                name: "chainID",
                 type: "uint256",
             },
         ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [],
-        name: "MIN_LABEL_LENGTH",
+        name: "getNFT",
         outputs: [
             {
-                internalType: "uint256",
+                components: [
+                    {
+                        internalType: "uint256",
+                        name: "chainId",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "address",
+                        name: "contractAddress",
+                        type: "address",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "tokenId",
+                        type: "uint256",
+                    },
+                ],
+                internalType: "struct INFTResolver.NFT",
                 name: "",
-                type: "uint256",
+                type: "tuple",
             },
         ],
         stateMutability: "view",
@@ -85,136 +82,8 @@ const _abi = [
         inputs: [
             {
                 internalType: "bytes32",
-                name: "fqdn",
+                name: "node",
                 type: "bytes32",
-            },
-            {
-                internalType: "uint256",
-                name: "chainId",
-                type: "uint256",
-            },
-        ],
-        name: "nft",
-        outputs: [
-            {
-                components: [
-                    {
-                        internalType: "address",
-                        name: "contract_",
-                        type: "address",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "tokenId",
-                        type: "uint256",
-                    },
-                ],
-                internalType: "struct INFTResolver.NFT",
-                name: "",
-                type: "tuple",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes",
-                name: "host",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "domain",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "tld",
-                type: "bytes",
-            },
-            {
-                internalType: "uint256",
-                name: "chainId",
-                type: "uint256",
-            },
-        ],
-        name: "nft",
-        outputs: [
-            {
-                components: [
-                    {
-                        internalType: "address",
-                        name: "contract_",
-                        type: "address",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "tokenId",
-                        type: "uint256",
-                    },
-                ],
-                internalType: "struct INFTResolver.NFT",
-                name: "",
-                type: "tuple",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes",
-                name: "fqdn",
-                type: "bytes",
-            },
-            {
-                internalType: "uint256",
-                name: "chainId",
-                type: "uint256",
-            },
-        ],
-        name: "nft",
-        outputs: [
-            {
-                components: [
-                    {
-                        internalType: "address",
-                        name: "contract_",
-                        type: "address",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "tokenId",
-                        type: "uint256",
-                    },
-                ],
-                internalType: "struct INFTResolver.NFT",
-                name: "",
-                type: "tuple",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes",
-                name: "host",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "domain",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "tld",
-                type: "bytes",
             },
             {
                 internalType: "uint256",
@@ -223,7 +92,7 @@ const _abi = [
             },
             {
                 internalType: "address",
-                name: "contract_",
+                name: "contractAddress",
                 type: "address",
             },
             {
@@ -240,156 +109,12 @@ const _abi = [
     {
         inputs: [
             {
-                internalType: "bytes",
-                name: "host",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "domain",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "tld",
-                type: "bytes",
-            },
-            {
-                internalType: "uint256",
-                name: "chainId",
-                type: "uint256",
-            },
-            {
-                internalType: "address",
-                name: "contract_",
-                type: "address",
-            },
-            {
-                internalType: "uint256",
-                name: "tokenId",
-                type: "uint256",
-            },
-        ],
-        name: "setNFT_SYNC",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
                 internalType: "bytes4",
                 name: "interfaceID",
                 type: "bytes4",
             },
         ],
         name: "supportsInterface",
-        outputs: [
-            {
-                internalType: "bool",
-                name: "",
-                type: "bool",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "string",
-                name: "host",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "",
-                type: "string",
-            },
-        ],
-        name: "valid",
-        outputs: [
-            {
-                internalType: "bool",
-                name: "",
-                type: "bool",
-            },
-        ],
-        stateMutability: "pure",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "string",
-                name: "domain",
-                type: "string",
-            },
-            {
-                internalType: "string",
-                name: "",
-                type: "string",
-            },
-        ],
-        name: "valid",
-        outputs: [
-            {
-                internalType: "bool",
-                name: "",
-                type: "bool",
-            },
-        ],
-        stateMutability: "pure",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes",
-                name: "domain",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "",
-                type: "bytes",
-            },
-        ],
-        name: "valid",
-        outputs: [
-            {
-                internalType: "bool",
-                name: "",
-                type: "bool",
-            },
-        ],
-        stateMutability: "pure",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes",
-                name: "host",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "",
-                type: "bytes",
-            },
-        ],
-        name: "valid",
         outputs: [
             {
                 internalType: "bool",

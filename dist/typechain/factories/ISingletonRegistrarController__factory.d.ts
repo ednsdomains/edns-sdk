@@ -9,11 +9,7 @@ export declare class ISingletonRegistrarController__factory {
             type: string;
         }[];
         name: string;
-        outputs: {
-            internalType: string;
-            name: string;
-            type: string;
-        }[];
+        outputs: never[];
         stateMutability: string;
         type: string;
     }[];

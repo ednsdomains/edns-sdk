@@ -237,6 +237,37 @@ const _abi = [
             },
             {
                 indexed: false,
+                internalType: "uint256",
+                name: "chainId",
+                type: "uint256",
+            },
+            {
+                indexed: false,
+                internalType: "address",
+                name: "contractAddress",
+                type: "address",
+            },
+            {
+                indexed: false,
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+            },
+        ],
+        name: "NFTChanged",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: "bytes32",
+                name: "node",
+                type: "bytes32",
+            },
+            {
+                indexed: false,
                 internalType: "string",
                 name: "name",
                 type: "string",
@@ -432,6 +463,47 @@ const _abi = [
             },
         ],
         stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "node",
+                type: "bytes32",
+            },
+            {
+                internalType: "uint256",
+                name: "chainID",
+                type: "uint256",
+            },
+        ],
+        name: "getNFT",
+        outputs: [
+            {
+                components: [
+                    {
+                        internalType: "uint256",
+                        name: "chainId",
+                        type: "uint256",
+                    },
+                    {
+                        internalType: "address",
+                        name: "contractAddress",
+                        type: "address",
+                    },
+                    {
+                        internalType: "uint256",
+                        name: "tokenId",
+                        type: "uint256",
+                    },
+                ],
+                internalType: "struct INFTResolver.NFT",
+                name: "",
+                type: "tuple",
+            },
+        ],
+        stateMutability: "nonpayable",
         type: "function",
     },
     {
@@ -694,6 +766,34 @@ const _abi = [
             },
         ],
         name: "setMultihash",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "node",
+                type: "bytes32",
+            },
+            {
+                internalType: "uint256",
+                name: "chainId",
+                type: "uint256",
+            },
+            {
+                internalType: "address",
+                name: "contractAddress",
+                type: "address",
+            },
+            {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+            },
+        ],
+        name: "setNFT",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
