@@ -10,9 +10,59 @@ const _abi = [
         anonymous: false,
         inputs: [
             {
+                indexed: true,
+                internalType: "address",
+                name: "owner",
+                type: "address",
+            },
+            {
+                indexed: true,
+                internalType: "address",
+                name: "approved",
+                type: "address",
+            },
+            {
+                indexed: true,
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+            },
+        ],
+        name: "Approval",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: "address",
+                name: "owner",
+                type: "address",
+            },
+            {
+                indexed: true,
+                internalType: "address",
+                name: "operator",
+                type: "address",
+            },
+            {
+                indexed: false,
+                internalType: "bool",
+                name: "approved",
+                type: "bool",
+            },
+        ],
+        name: "ApprovalForAll",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
                 indexed: false,
                 internalType: "bytes",
-                name: "domain",
+                name: "name",
                 type: "bytes",
             },
             {
@@ -43,7 +93,7 @@ const _abi = [
             {
                 indexed: false,
                 internalType: "bytes",
-                name: "domain",
+                name: "name",
                 type: "bytes",
             },
             {
@@ -139,115 +189,130 @@ const _abi = [
         type: "event",
     },
     {
+        anonymous: false,
         inputs: [
             {
-                internalType: "bytes32",
-                name: "tld",
-                type: "bytes32",
+                indexed: true,
+                internalType: "address",
+                name: "from",
+                type: "address",
             },
-        ],
-        name: "enable",
-        outputs: [
             {
-                internalType: "bool",
-                name: "",
-                type: "bool",
+                indexed: true,
+                internalType: "address",
+                name: "to",
+                type: "address",
+            },
+            {
+                indexed: true,
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
             },
         ],
-        stateMutability: "view",
+        name: "Transfer",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+            },
+            {
+                indexed: true,
+                internalType: "address",
+                name: "user",
+                type: "address",
+            },
+            {
+                indexed: false,
+                internalType: "uint64",
+                name: "expires",
+                type: "uint64",
+            },
+        ],
+        name: "UpdateUser",
+        type: "event",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "to",
+                type: "address",
+            },
+            {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+            },
+        ],
+        name: "approve",
+        outputs: [],
+        stateMutability: "nonpayable",
         type: "function",
     },
     {
         inputs: [
             {
-                internalType: "bytes32",
-                name: "tld",
-                type: "bytes32",
+                internalType: "address",
+                name: "owner",
+                type: "address",
             },
         ],
-        name: "exists",
-        outputs: [
-            {
-                internalType: "bool",
-                name: "",
-                type: "bool",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes32",
-                name: "host",
-                type: "bytes32",
-            },
-            {
-                internalType: "bytes32",
-                name: "domain",
-                type: "bytes32",
-            },
-            {
-                internalType: "bytes32",
-                name: "tld",
-                type: "bytes32",
-            },
-        ],
-        name: "exists",
-        outputs: [
-            {
-                internalType: "bool",
-                name: "",
-                type: "bool",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes32",
-                name: "domain",
-                type: "bytes32",
-            },
-            {
-                internalType: "bytes32",
-                name: "tld",
-                type: "bytes32",
-            },
-        ],
-        name: "exists",
-        outputs: [
-            {
-                internalType: "bool",
-                name: "",
-                type: "bool",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes32",
-                name: "domain",
-                type: "bytes32",
-            },
-            {
-                internalType: "bytes32",
-                name: "tld",
-                type: "bytes32",
-            },
-        ],
-        name: "expiry",
+        name: "balanceOf",
         outputs: [
             {
                 internalType: "uint256",
-                name: "",
+                name: "balance",
                 type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+            },
+        ],
+        name: "getApproved",
+        outputs: [
+            {
+                internalType: "address",
+                name: "operator",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "name",
+                type: "bytes32",
+            },
+            {
+                internalType: "bytes32",
+                name: "tld",
+                type: "bytes32",
+            },
+        ],
+        name: "getExpires",
+        outputs: [
+            {
+                internalType: "uint64",
+                name: "",
+                type: "uint64",
             },
         ],
         stateMutability: "view",
@@ -255,7 +320,7 @@ const _abi = [
     },
     {
         inputs: [],
-        name: "gracePeriod",
+        name: "getGracePeriod",
         outputs: [
             {
                 internalType: "uint256",
@@ -270,7 +335,7 @@ const _abi = [
         inputs: [
             {
                 internalType: "bytes32",
-                name: "domain",
+                name: "name",
                 type: "bytes32",
             },
             {
@@ -279,55 +344,112 @@ const _abi = [
                 type: "bytes32",
             },
         ],
-        name: "live",
+        name: "getOwner",
         outputs: [
-            {
-                internalType: "bool",
-                name: "",
-                type: "bool",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes32",
-                name: "tld",
-                type: "bytes32",
-            },
-        ],
-        name: "omni",
-        outputs: [
-            {
-                internalType: "bool",
-                name: "",
-                type: "bool",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes32",
-                name: "domain",
-                type: "bytes32",
-            },
-            {
-                internalType: "bytes32",
-                name: "tld",
-                type: "bytes32",
-            },
             {
                 internalType: "address",
-                name: "_operator",
+                name: "",
                 type: "address",
             },
         ],
-        name: "operator",
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "tld",
+                type: "bytes32",
+            },
+        ],
+        name: "getOwner",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "name",
+                type: "bytes32",
+            },
+            {
+                internalType: "bytes32",
+                name: "tld",
+                type: "bytes32",
+            },
+        ],
+        name: "getResolver",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "tld",
+                type: "bytes32",
+            },
+        ],
+        name: "getResolver",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "tld",
+                type: "bytes32",
+            },
+        ],
+        name: "getTldType",
+        outputs: [
+            {
+                internalType: "enum IRegistry.TldType",
+                name: "",
+                type: "uint8",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "owner",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "operator",
+                type: "address",
+            },
+        ],
+        name: "isApprovedForAll",
         outputs: [
             {
                 internalType: "bool",
@@ -342,7 +464,26 @@ const _abi = [
         inputs: [
             {
                 internalType: "bytes32",
-                name: "domain",
+                name: "tld",
+                type: "bytes32",
+            },
+        ],
+        name: "isEnable",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "name",
                 type: "bytes32",
             },
             {
@@ -351,7 +492,26 @@ const _abi = [
                 type: "bytes32",
             },
         ],
-        name: "operator",
+        name: "isExists",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "tld",
+                type: "bytes32",
+            },
+        ],
+        name: "isExists",
         outputs: [
             {
                 internalType: "bool",
@@ -371,7 +531,7 @@ const _abi = [
             },
             {
                 internalType: "bytes32",
-                name: "domain",
+                name: "name",
                 type: "bytes32",
             },
             {
@@ -380,7 +540,55 @@ const _abi = [
                 type: "bytes32",
             },
         ],
-        name: "operator",
+        name: "isExists",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "name",
+                type: "bytes32",
+            },
+            {
+                internalType: "bytes32",
+                name: "tld",
+                type: "bytes32",
+            },
+        ],
+        name: "isLive",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "name",
+                type: "bytes32",
+            },
+            {
+                internalType: "bytes32",
+                name: "tld",
+                type: "bytes32",
+            },
+        ],
+        name: "isOperator",
         outputs: [
             {
                 internalType: "bool",
@@ -400,7 +608,7 @@ const _abi = [
             },
             {
                 internalType: "bytes32",
-                name: "domain",
+                name: "name",
                 type: "bytes32",
             },
             {
@@ -408,13 +616,8 @@ const _abi = [
                 name: "tld",
                 type: "bytes32",
             },
-            {
-                internalType: "address",
-                name: "_operator",
-                type: "address",
-            },
         ],
-        name: "operator",
+        name: "isOperator",
         outputs: [
             {
                 internalType: "bool",
@@ -429,15 +632,78 @@ const _abi = [
         inputs: [
             {
                 internalType: "bytes32",
+                name: "host",
+                type: "bytes32",
+            },
+            {
+                internalType: "bytes32",
+                name: "name",
+                type: "bytes32",
+            },
+            {
+                internalType: "bytes32",
                 name: "tld",
                 type: "bytes32",
             },
+            {
+                internalType: "address",
+                name: "_operator",
+                type: "address",
+            },
         ],
-        name: "owner",
+        name: "isOperator",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "name",
+                type: "bytes32",
+            },
+            {
+                internalType: "bytes32",
+                name: "tld",
+                type: "bytes32",
+            },
+            {
+                internalType: "address",
+                name: "_operator",
+                type: "address",
+            },
+        ],
+        name: "isOperator",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+            },
+        ],
+        name: "ownerOf",
         outputs: [
             {
                 internalType: "address",
-                name: "",
+                name: "owner",
                 type: "address",
             },
         ],
@@ -448,7 +714,7 @@ const _abi = [
         inputs: [
             {
                 internalType: "bytes32",
-                name: "domain",
+                name: "name",
                 type: "bytes32",
             },
             {
@@ -457,58 +723,101 @@ const _abi = [
                 type: "bytes32",
             },
         ],
-        name: "owner",
-        outputs: [
-            {
-                internalType: "address",
-                name: "",
-                type: "address",
-            },
-        ],
-        stateMutability: "view",
+        name: "remove",
+        outputs: [],
+        stateMutability: "nonpayable",
         type: "function",
     },
     {
         inputs: [
             {
                 internalType: "bytes32",
+                name: "host",
+                type: "bytes32",
+            },
+            {
+                internalType: "bytes32",
+                name: "name",
+                type: "bytes32",
+            },
+            {
+                internalType: "bytes32",
                 name: "tld",
                 type: "bytes32",
             },
         ],
-        name: "resolver",
-        outputs: [
-            {
-                internalType: "address",
-                name: "",
-                type: "address",
-            },
-        ],
-        stateMutability: "view",
+        name: "remove",
+        outputs: [],
+        stateMutability: "nonpayable",
         type: "function",
     },
     {
         inputs: [
             {
-                internalType: "bytes32",
-                name: "domain",
-                type: "bytes32",
-            },
-            {
-                internalType: "bytes32",
-                name: "tld",
-                type: "bytes32",
-            },
-        ],
-        name: "resolver",
-        outputs: [
-            {
                 internalType: "address",
-                name: "",
+                name: "from",
                 type: "address",
             },
+            {
+                internalType: "address",
+                name: "to",
+                type: "address",
+            },
+            {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+            },
         ],
-        stateMutability: "view",
+        name: "safeTransferFrom",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "from",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "to",
+                type: "address",
+            },
+            {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+            },
+            {
+                internalType: "bytes",
+                name: "data",
+                type: "bytes",
+            },
+        ],
+        name: "safeTransferFrom",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "operator",
+                type: "address",
+            },
+            {
+                internalType: "bool",
+                name: "_approved",
+                type: "bool",
+            },
+        ],
+        name: "setApprovalForAll",
+        outputs: [],
+        stateMutability: "nonpayable",
         type: "function",
     },
     {
@@ -533,7 +842,7 @@ const _abi = [
         inputs: [
             {
                 internalType: "bytes32",
-                name: "domain",
+                name: "name",
                 type: "bytes32",
             },
             {
@@ -542,12 +851,12 @@ const _abi = [
                 type: "bytes32",
             },
             {
-                internalType: "uint256",
-                name: "expiry",
-                type: "uint256",
+                internalType: "uint64",
+                name: "expires",
+                type: "uint64",
             },
         ],
-        name: "setExpiry",
+        name: "setExpires",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
@@ -556,7 +865,7 @@ const _abi = [
         inputs: [
             {
                 internalType: "bytes32",
-                name: "domain",
+                name: "name",
                 type: "bytes32",
             },
             {
@@ -589,7 +898,7 @@ const _abi = [
             },
             {
                 internalType: "bytes32",
-                name: "domain",
+                name: "name",
                 type: "bytes32",
             },
             {
@@ -617,7 +926,7 @@ const _abi = [
         inputs: [
             {
                 internalType: "bytes32",
-                name: "domain",
+                name: "name",
                 type: "bytes32",
             },
             {
@@ -650,6 +959,62 @@ const _abi = [
             },
         ],
         name: "setOwner",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes",
+                name: "host",
+                type: "bytes",
+            },
+            {
+                internalType: "bytes",
+                name: "name",
+                type: "bytes",
+            },
+            {
+                internalType: "bytes",
+                name: "tld",
+                type: "bytes",
+            },
+        ],
+        name: "setRecord",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes",
+                name: "name",
+                type: "bytes",
+            },
+            {
+                internalType: "bytes",
+                name: "tld",
+                type: "bytes",
+            },
+            {
+                internalType: "address",
+                name: "owner",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "resolver",
+                type: "address",
+            },
+            {
+                internalType: "uint64",
+                name: "expires",
+                type: "uint64",
+            },
+        ],
+        name: "setRecord",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
@@ -677,9 +1042,9 @@ const _abi = [
                 type: "bool",
             },
             {
-                internalType: "bool",
-                name: "omni",
-                type: "bool",
+                internalType: "enum IRegistry.TldType",
+                name: "type_",
+                type: "uint8",
             },
         ],
         name: "setRecord",
@@ -690,32 +1055,105 @@ const _abi = [
     {
         inputs: [
             {
-                internalType: "bytes",
-                name: "domain",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
+                internalType: "bytes32",
                 name: "tld",
-                type: "bytes",
-            },
-            {
-                internalType: "address",
-                name: "owner",
-                type: "address",
+                type: "bytes32",
             },
             {
                 internalType: "address",
                 name: "resolver",
+                type: "address",
+            },
+        ],
+        name: "setResolver",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes32",
+                name: "name",
+                type: "bytes32",
+            },
+            {
+                internalType: "bytes32",
+                name: "tld",
+                type: "bytes32",
+            },
+            {
+                internalType: "address",
+                name: "resolver",
+                type: "address",
+            },
+        ],
+        name: "setResolver",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+            },
+            {
+                internalType: "address",
+                name: "user",
+                type: "address",
+            },
+            {
+                internalType: "uint64",
+                name: "expires",
+                type: "uint64",
+            },
+        ],
+        name: "setUser",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes4",
+                name: "interfaceId",
+                type: "bytes4",
+            },
+        ],
+        name: "supportsInterface",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "from",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "to",
                 type: "address",
             },
             {
                 internalType: "uint256",
-                name: "expiry",
+                name: "tokenId",
                 type: "uint256",
             },
         ],
-        name: "setRecord",
+        name: "transferFrom",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
@@ -723,65 +1161,39 @@ const _abi = [
     {
         inputs: [
             {
-                internalType: "bytes",
-                name: "host",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "domain",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "tld",
-                type: "bytes",
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
             },
         ],
-        name: "setRecord",
-        outputs: [],
-        stateMutability: "nonpayable",
+        name: "userExpires",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
         type: "function",
     },
     {
         inputs: [
             {
-                internalType: "bytes32",
-                name: "tld",
-                type: "bytes32",
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
             },
+        ],
+        name: "userOf",
+        outputs: [
             {
                 internalType: "address",
-                name: "resolver",
+                name: "",
                 type: "address",
             },
         ],
-        name: "setResolver",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes32",
-                name: "domain",
-                type: "bytes32",
-            },
-            {
-                internalType: "bytes32",
-                name: "tld",
-                type: "bytes32",
-            },
-            {
-                internalType: "address",
-                name: "resolver",
-                type: "address",
-            },
-        ],
-        name: "setResolver",
-        outputs: [],
-        stateMutability: "nonpayable",
+        stateMutability: "view",
         type: "function",
     },
 ];

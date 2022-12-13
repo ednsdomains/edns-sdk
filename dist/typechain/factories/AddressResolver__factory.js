@@ -18,7 +18,7 @@ const _abi = [
             {
                 indexed: false,
                 internalType: "bytes",
-                name: "domain",
+                name: "name",
                 type: "bytes",
             },
             {
@@ -29,18 +29,43 @@ const _abi = [
             },
             {
                 indexed: false,
-                internalType: "uint256",
-                name: "coin",
-                type: "uint256",
+                internalType: "address",
+                name: "address_",
+                type: "address",
+            },
+        ],
+        name: "SetAddress",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "bytes",
+                name: "host",
+                type: "bytes",
             },
             {
                 indexed: false,
                 internalType: "bytes",
-                name: "address_",
+                name: "name",
                 type: "bytes",
             },
+            {
+                indexed: false,
+                internalType: "bytes",
+                name: "tld",
+                type: "bytes",
+            },
+            {
+                indexed: false,
+                internalType: "address",
+                name: "address_",
+                type: "address",
+            },
         ],
-        name: "SetAddress",
+        name: "SetReverseAddress",
         type: "event",
     },
     {
@@ -78,7 +103,7 @@ const _abi = [
             },
             {
                 internalType: "bytes",
-                name: "domain",
+                name: "name",
                 type: "bytes",
             },
             {
@@ -86,18 +111,13 @@ const _abi = [
                 name: "tld",
                 type: "bytes",
             },
-            {
-                internalType: "uint256",
-                name: "coin",
-                type: "uint256",
-            },
         ],
-        name: "addr",
+        name: "getAddress",
         outputs: [
             {
-                internalType: "bytes",
+                internalType: "address",
                 name: "",
-                type: "bytes",
+                type: "address",
             },
         ],
         stateMutability: "view",
@@ -106,70 +126,12 @@ const _abi = [
     {
         inputs: [
             {
-                internalType: "bytes",
-                name: "fqdn_",
-                type: "bytes",
-            },
-            {
-                internalType: "uint256",
-                name: "coin",
-                type: "uint256",
+                internalType: "address",
+                name: "address_",
+                type: "address",
             },
         ],
-        name: "addr",
-        outputs: [
-            {
-                internalType: "bytes",
-                name: "",
-                type: "bytes",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes",
-                name: "domain",
-                type: "bytes",
-            },
-            {
-                internalType: "bytes",
-                name: "tld",
-                type: "bytes",
-            },
-            {
-                internalType: "uint256",
-                name: "coin",
-                type: "uint256",
-            },
-        ],
-        name: "addr",
-        outputs: [
-            {
-                internalType: "bytes",
-                name: "",
-                type: "bytes",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "bytes32",
-                name: "fqdn",
-                type: "bytes32",
-            },
-            {
-                internalType: "uint256",
-                name: "coin",
-                type: "uint256",
-            },
-        ],
-        name: "addr",
+        name: "getReverseAddress",
         outputs: [
             {
                 internalType: "bytes",
@@ -189,7 +151,7 @@ const _abi = [
             },
             {
                 internalType: "bytes",
-                name: "domain",
+                name: "name",
                 type: "bytes",
             },
             {
@@ -198,17 +160,12 @@ const _abi = [
                 type: "bytes",
             },
             {
-                internalType: "uint256",
-                name: "coin",
-                type: "uint256",
-            },
-            {
-                internalType: "bytes",
+                internalType: "address",
                 name: "address_",
-                type: "bytes",
+                type: "address",
             },
         ],
-        name: "setAddr",
+        name: "setAddress",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
@@ -222,7 +179,7 @@ const _abi = [
             },
             {
                 internalType: "bytes",
-                name: "domain",
+                name: "name",
                 type: "bytes",
             },
             {
@@ -231,17 +188,68 @@ const _abi = [
                 type: "bytes",
             },
             {
-                internalType: "uint256",
-                name: "coin",
-                type: "uint256",
+                internalType: "address",
+                name: "address_",
+                type: "address",
+            },
+        ],
+        name: "setAddress_SYNC",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes",
+                name: "host",
+                type: "bytes",
             },
             {
                 internalType: "bytes",
-                name: "address_",
+                name: "name",
                 type: "bytes",
             },
+            {
+                internalType: "bytes",
+                name: "tld",
+                type: "bytes",
+            },
+            {
+                internalType: "address",
+                name: "address_",
+                type: "address",
+            },
         ],
-        name: "setAddr_SYNC",
+        name: "setReverseAddress",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "bytes",
+                name: "host",
+                type: "bytes",
+            },
+            {
+                internalType: "bytes",
+                name: "name",
+                type: "bytes",
+            },
+            {
+                internalType: "bytes",
+                name: "tld",
+                type: "bytes",
+            },
+            {
+                internalType: "address",
+                name: "address_",
+                type: "address",
+            },
+        ],
+        name: "setReverseAddress_SYNC",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
@@ -298,7 +306,7 @@ const _abi = [
         inputs: [
             {
                 internalType: "string",
-                name: "domain",
+                name: "name",
                 type: "string",
             },
             {
@@ -322,7 +330,7 @@ const _abi = [
         inputs: [
             {
                 internalType: "bytes",
-                name: "domain",
+                name: "name",
                 type: "bytes",
             },
             {
