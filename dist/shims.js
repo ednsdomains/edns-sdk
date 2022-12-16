@@ -690,17 +690,17 @@
 
 	    // Shim crypto.getRandomValues
 	    // @TOOD: Investigate: https://github.com/brix/crypto-js/issues/7
-	    if (!commonjsGlobal.crypto) { commonjsGlobal.crypto = { }; }
-	    if (!commonjsGlobal.crypto.getRandomValues) {
-	        shims.push("crypto.getRandomValues");
-	        console.log("WARNING: This environment is missing a secure random source; generated private keys may be at risk, think VERY carefully about not adding a better secure source.");
-	        commonjsGlobal.crypto.getRandomValues = function(buffer) {
-	            var start = Math.floor((new Date()).getTime()) % buffer.length;
-	            for (var i = 0; i < buffer.length; i++) {
-	                buffer[(start + i) % buffer.length] = Math.floor(Math.random() * 256);
-	            }
-	        };
-	    }
+	    // if (!commonjsGlobal.crypto) { commonjsGlobal.crypto = { }; }
+	    // if (!commonjsGlobal.crypto.getRandomValues) {
+	    //     shims.push("crypto.getRandomValues");
+	    //     console.log("WARNING: This environment is missing a secure random source; generated private keys may be at risk, think VERY carefully about not adding a better secure source.");
+	    //     commonjsGlobal.crypto.getRandomValues = function(buffer) {
+	    //         var start = Math.floor((new Date()).getTime()) % buffer.length;
+	    //         for (var i = 0; i < buffer.length; i++) {
+	    //             buffer[(start + i) % buffer.length] = Math.floor(Math.random() * 256);
+	    //         }
+	    //     };
+	    // }
 
 	    // Shim FileReader.readAsArrayBuffer
 	    // https://github.com/facebook/react-native/issues/21209
