@@ -1,26 +1,24 @@
-
-import { Addressable } from "ethers";
-
+import { ethers } from "ethers";
 export interface AddressTypes {
-    "Registry.Init": Addressable,
-    "Registry.DiamondCutFacet"?: Addressable
-    "Registry.DiamondLoupeFacet"?: Addressable,
-    "Registry.AccessControlFacet"?: Addressable,
-    "Registry.TldRecordFacet"?: Addressable,
-    "Registry.DomainRecordFacet"?: Addressable,
-    "Registry.HostRecordFacet"?: Addressable,
-    "Registry.BaseRegistryFacet"?: Addressable,
-    "Registry.Diamond"?: Addressable,
-    "DefaultWrapper"?: Addressable,
-    "PublicResolver"?: Addressable,
-    "Registrar"?: Addressable,
-    "Root"?: Addressable,
-    "Token"?: Addressable,
-    "ClassicalRegistrarController"?: Addressable,
-    "UniversalRegistrarController"?: Addressable,
-    "OmniRegistrarController"?: Addressable,
-    "Portal"?: Addressable,
-    "Bridge"?: Addressable,
-    "Synchronizer"?: Addressable,
-    "LayerZeroProvider"?: Addressable
+  "Registry.Init": string;
+  "Registry.DiamondCutFacet"?: string;
+  "Registry.DiamondLoupeFacet"?: string;
+  "Registry.AccessControlFacet"?: string;
+  "Registry.TldRecordFacet"?: string;
+  "Registry.DomainRecordFacet"?: string;
+  "Registry.HostRecordFacet"?: string;
+  "Registry.BaseRegistryFacet"?: string;
+  "Registry.Diamond"?: string;
+  DefaultWrapper?: string;
+  PublicResolver?: string;
+  Registrar?: string;
+  Root?: string;
+  Token?: string;
+  ClassicalRegistrarController?: string;
+  UniversalRegistrarController?: string;
+  OmniRegistrarController?: string;
+  Portal?: string;
+  Bridge?: string;
+  Synchronizer?: string;
+  LayerZeroProvider?: string;
 }

@@ -21,17 +21,17 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface IMortgageInterface extends ethers.utils.Interface {
   functions: {
-    "deposit(bytes32,bytes32,address,uint256)": FunctionFragment;
+    "deposit(bytes32,bytes32,address,address,uint256)": FunctionFragment;
     "getRequirement(bytes32,bytes32)": FunctionFragment;
     "isExists(bytes32,bytes32)": FunctionFragment;
     "isFulfill(bytes32,bytes32)": FunctionFragment;
     "setRequirement(bytes32,bytes32,uint256)": FunctionFragment;
-    "withdraw(bytes32,bytes32,uint256)": FunctionFragment;
+    "withdraw(bytes32,bytes32,address,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "deposit",
-    values: [BytesLike, BytesLike, string, BigNumberish]
+    values: [BytesLike, BytesLike, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getRequirement",
@@ -51,7 +51,7 @@ interface IMortgageInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "withdraw",
-    values: [BytesLike, BytesLike, BigNumberish]
+    values: [BytesLike, BytesLike, string, BigNumberish]
   ): string;
 
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
@@ -142,6 +142,7 @@ export class IMortgage extends BaseContract {
       name: BytesLike,
       tld: BytesLike,
       owner: string,
+      spender: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -174,6 +175,7 @@ export class IMortgage extends BaseContract {
     withdraw(
       name: BytesLike,
       tld: BytesLike,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -183,6 +185,7 @@ export class IMortgage extends BaseContract {
     name: BytesLike,
     tld: BytesLike,
     owner: string,
+    spender: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -215,6 +218,7 @@ export class IMortgage extends BaseContract {
   withdraw(
     name: BytesLike,
     tld: BytesLike,
+    recipient: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -224,6 +228,7 @@ export class IMortgage extends BaseContract {
       name: BytesLike,
       tld: BytesLike,
       owner: string,
+      spender: string,
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -256,6 +261,7 @@ export class IMortgage extends BaseContract {
     withdraw(
       name: BytesLike,
       tld: BytesLike,
+      recipient: string,
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -308,6 +314,7 @@ export class IMortgage extends BaseContract {
       name: BytesLike,
       tld: BytesLike,
       owner: string,
+      spender: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -340,6 +347,7 @@ export class IMortgage extends BaseContract {
     withdraw(
       name: BytesLike,
       tld: BytesLike,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -350,6 +358,7 @@ export class IMortgage extends BaseContract {
       name: BytesLike,
       tld: BytesLike,
       owner: string,
+      spender: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -382,6 +391,7 @@ export class IMortgage extends BaseContract {
     withdraw(
       name: BytesLike,
       tld: BytesLike,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

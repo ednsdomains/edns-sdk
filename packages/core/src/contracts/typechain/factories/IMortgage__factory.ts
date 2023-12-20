@@ -87,6 +87,11 @@ const _abi = [
         type: "address",
       },
       {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
         internalType: "uint256",
         name: "amount",
         type: "uint256",
@@ -203,6 +208,11 @@ const _abi = [
         internalType: "bytes32",
         name: "tld",
         type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "recipient",
+        type: "address",
       },
       {
         internalType: "uint256",

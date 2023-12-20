@@ -1,0 +1,101 @@
+{
+  "404": {
+    "type": "universal"
+  },
+  "gamefi": {
+    "type": "universal"
+  },
+  "sandbox": {
+    "type": "universal"
+  },
+  "ass": {
+    "type": "universal"
+  },
+  "music": {
+    "type": "universal"
+  },
+  "web3": {
+    "type": "universal"
+  },
+  "zkevm": {
+    "type": "classical"
+  },
+  "meta": {
+    "type": "universal"
+  },
+  "lz": {
+    "type": "universal"
+  },
+  "layerzero": {
+    "type": "universal"
+  },
+  "fantom": {
+    "type": "classical"
+  },
+  "ftm": {
+    "type": "classical"
+  },
+  "layer2": {
+    "type": "universal"
+  },
+  "optimism": {
+    "type": "classical"
+  },
+  "op": {
+    "type": "classical"
+  },
+  "harmony": {
+    "type": "classical"
+  },
+  "one": {
+    "type": "classical"
+  },
+  "arbitrum": {
+    "type": "classical"
+  },
+  "arb": {
+    "type": "classical"
+  },
+  "celo": {
+    "type": "classical"
+  },
+  "okex": {
+    "type": "classical"
+  },
+  "okt": {
+    "type": "classical"
+  },
+  "okc": {
+    "type": "classical"
+  },
+  "moonbeam": {
+    "type": "classical"
+  },
+  "moonriver": {
+    "type": "classical"
+  },
+  "iotex": {
+    "type": "classical"
+  },
+  "gnosis": {
+    "type": "classical"
+  },
+  "xdai": {
+    "type": "classical"
+  },
+  "binance": {
+    "type": "classical"
+  },
+  "bsc": {
+    "type": "classical"
+  },
+  "bnb": {
+    "type": "classical"
+  },
+  "avalanche": {
+    "type": "classical"
+  },
+  "avax": {
+    "type": "classical"
+  }
+}

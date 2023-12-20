@@ -1,0 +1,212 @@
+[
+  {
+    "id": "ethereum::mainnet::arbitrum",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Arbitrum",
+    "fullname": "Arbitrum",
+    "chainId": 42161,
+    "currency": "ETH",
+    "rpc": {
+      "public": {
+        "http": "https://endpoints.omniatech.io/v1/arbitrum/one/public",
+        "websocket": "https://endpoints.omniatech.io/v1/arbitrum/one/public"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::polygon",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Polygon",
+    "fullname": "POLYGON",
+    "chainId": 137,
+    "currency": "MATIX",
+    "rpc": {
+      "public": {
+        "http": "https://polygon-rpc.com",
+        "websocket": "https://polygon-rpc.com"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::gnosis-chain",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Gnosis",
+    "fullname": "Gnosis Chain",
+    "chainId": 100,
+    "currency": "XDAI",
+    "rpc": {
+      "public": {
+        "http": "https://xdai-rpc.gateway.pokt.network",
+        "websocket": "https://xdai-rpc.gateway.pokt.network"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::bnb-chain",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Binance",
+    "fullname": "BNB Chain",
+    "chainId": 56,
+    "currency": "BNB",
+    "rpc": {
+      "public": {
+        "http": "https://endpoints.omniatech.io/v1/bsc/mainnet/public",
+        "websocket": "https://endpoints.omniatech.io/v1/bsc/mainnet/public"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::celo-mainnet",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Celo",
+    "fullname": "Celo Mainnet",
+    "chainId": 42220,
+    "currency": "CELO",
+    "rpc": {
+      "public": {
+        "http": "https://1rpc.io/celo",
+        "websocket": "https://1rpc.io/celo"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::avalanche-c-chain",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Avalanche C-Chain",
+    "fullname": "Avalanche C-Chain",
+    "chainId": 43114,
+    "currency": "AVAX",
+    "rpc": {
+      "public": {
+        "http": "https://avalanche-c-chain.publicnode.com",
+        "websocket": "https://avalanche-c-chain.publicnode.com"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::okc-mainnet",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "OKC",
+    "fullname": "OKC Mainnet",
+    "chainId": 66,
+    "currency": "OKT",
+    "rpc": {
+      "public": {
+        "http": "https://exchainrpc.okex.org",
+        "websocket": "https://exchainrpc.okex.org"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::polygon-zkevm",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Polygon zkEVM",
+    "fullname": "Polygon zkEVM",
+    "chainId": 1101,
+    "currency": "ETH",
+    "rpc": {
+      "public": {
+        "http": "https://zkevm-rpc.com",
+        "websocket": "https://zkevm-rpc.com"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::moonbeam",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Moonbeam",
+    "fullname": "Moonbeam",
+    "chainId": 1284,
+    "currency": "GLMR",
+    "rpc": {
+      "public": {
+        "http": "https://rpc.api.moonbeam.network",
+        "websocket": "https://rpc.api.moonbeam.network"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::moonriver",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Moonriver",
+    "fullname": "Moonriver",
+    "chainId": 1285,
+    "currency": "MOVR",
+    "rpc": {
+      "public": {
+        "http": "https://rpc.api.moonriver.moonbeam.network",
+        "websocket": "https://rpc.api.moonriver.moonbeam.network"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::fantom",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Fantom",
+    "fullname": "Fantom",
+    "chainId": 250,
+    "currency": "FTM",
+    "rpc": {
+      "public": {
+        "http": "https://fantom.publicnode.com",
+        "websocket": "https://fantom.publicnode.com"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::optimism",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Optimism",
+    "fullname": "Optimism",
+    "chainId": 10,
+    "currency": "ETH",
+    "rpc": {
+      "public": {
+        "http": "https://1rpc.io/op",
+        "websocket": "https://1rpc.io/op"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::harmony-one",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "Harmony One",
+    "fullname": "Harmony One",
+    "chainId": 1666600000,
+    "currency": "ONE",
+    "rpc": {
+      "public": {
+        "http": "https://1rpc.io/one",
+        "websocket": "https://1rpc.io/one"
+      }
+    }
+  },
+  {
+    "id": "ethereum::mainnet::iotex-mainnet",
+    "eco": "ethereum",
+    "network": "mainnet",
+    "name": "IoTeX",
+    "fullname": "IoTeX Mainnet",
+    "chainId": 4689,
+    "currency": "IOTX",
+    "rpc": {
+      "public": {
+        "http": "https://babel-api.mainnet.iotex.one",
+        "websocket": "https://babel-api.mainnet.iotex.one"
+      }
+    }
+  }
+]

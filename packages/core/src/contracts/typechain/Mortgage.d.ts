@@ -25,7 +25,7 @@ interface MortgageInterface extends ethers.utils.Interface {
     "ADMIN_ROLE()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "OPERATOR_ROLE()": FunctionFragment;
-    "deposit(bytes32,bytes32,address,uint256)": FunctionFragment;
+    "deposit(bytes32,bytes32,address,address,uint256)": FunctionFragment;
     "getRegistry()": FunctionFragment;
     "getRequirement(bytes32,bytes32)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
@@ -45,7 +45,7 @@ interface MortgageInterface extends ethers.utils.Interface {
     "unpause()": FunctionFragment;
     "upgradeTo(address)": FunctionFragment;
     "upgradeToAndCall(address,bytes)": FunctionFragment;
-    "withdraw(bytes32,bytes32,uint256)": FunctionFragment;
+    "withdraw(bytes32,bytes32,address,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -62,7 +62,7 @@ interface MortgageInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "deposit",
-    values: [BytesLike, BytesLike, string, BigNumberish]
+    values: [BytesLike, BytesLike, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getRegistry",
@@ -124,7 +124,7 @@ interface MortgageInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "withdraw",
-    values: [BytesLike, BytesLike, BigNumberish]
+    values: [BytesLike, BytesLike, string, BigNumberish]
   ): string;
 
   decodeFunctionResult(functionFragment: "ADMIN_ROLE", data: BytesLike): Result;
@@ -314,6 +314,7 @@ export class Mortgage extends BaseContract {
       name: BytesLike,
       tld: BytesLike,
       owner: string,
+      spender: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -412,6 +413,7 @@ export class Mortgage extends BaseContract {
     withdraw(
       name: BytesLike,
       tld: BytesLike,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -427,6 +429,7 @@ export class Mortgage extends BaseContract {
     name: BytesLike,
     tld: BytesLike,
     owner: string,
+    spender: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -525,6 +528,7 @@ export class Mortgage extends BaseContract {
   withdraw(
     name: BytesLike,
     tld: BytesLike,
+    recipient: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -540,6 +544,7 @@ export class Mortgage extends BaseContract {
       name: BytesLike,
       tld: BytesLike,
       owner: string,
+      spender: string,
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -628,6 +633,7 @@ export class Mortgage extends BaseContract {
     withdraw(
       name: BytesLike,
       tld: BytesLike,
+      recipient: string,
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -792,6 +798,7 @@ export class Mortgage extends BaseContract {
       name: BytesLike,
       tld: BytesLike,
       owner: string,
+      spender: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -893,6 +900,7 @@ export class Mortgage extends BaseContract {
     withdraw(
       name: BytesLike,
       tld: BytesLike,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -911,6 +919,7 @@ export class Mortgage extends BaseContract {
       name: BytesLike,
       tld: BytesLike,
       owner: string,
+      spender: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1012,6 +1021,7 @@ export class Mortgage extends BaseContract {
     withdraw(
       name: BytesLike,
       tld: BytesLike,
+      recipient: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
