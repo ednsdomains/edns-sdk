@@ -29,6 +29,8 @@ import {
 } from "./types";
 import { namehash } from "ethers/lib/utils";
 import { getDomainType, getFqdnBytes } from "./utils";
+import { ContractFactory } from "./factories/contract.factory";
+import { ApiFactory } from "./factories/api.factory";
 
 export class EDNS {
   private static _instance: EDNS;
@@ -181,6 +183,14 @@ export class EDNS {
 
   public getRegistry(chainId: EdnsChainId) {
     return this.registries[chainId];
+  }
+
+  public getFactory(type: "chain" | "api", chainId?: EdnsChainId) {
+    if (type === "chain" && chainId) {
+      return new ContractFactory(this.registries[chainId]);
+    } else {
+      return new ApiFactory();
+    }
   }
 
   async transferDomain() {}

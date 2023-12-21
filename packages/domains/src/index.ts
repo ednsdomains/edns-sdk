@@ -9,10 +9,14 @@ import { EDNS } from "../../core/src";
 export class DomainManager {
   private edns: EDNS = EDNS.getInstance();
 
+  private factoryType: "chain" | "api" = "chain";
+
   // private tld: Uint8Array;
   // private name: Uint8Array;
 
-  public constructor() {}
+  public constructor(factoryType: "chain" | "api") {
+    this.factoryType = factoryType;
+  }
 
   public IsDomainAvaliable = async (
     fqdn: string,
@@ -25,9 +29,10 @@ export class DomainManager {
       chainId
     );
     const promises = registrarControllers.map(async (registrarController) => {
-      const promise = registrarController.callStatic[
-        "isAvailable(bytes,bytes)"
-      ](_name, _tld);
+      const promise = registrarController["isAvailable(bytes,bytes)"](
+        _name,
+        _tld
+      );
       return Promise.race([
         promise.catch((err) => {
           err;
@@ -46,57 +51,39 @@ export class DomainManager {
     );
   };
 
+  public IsExist = async (fqdn: string, chainId: EdnsChainId) => {
+    const factory = this.edns.getFactory(this.factoryType, chainId);
+
+    return await factory.isExists(fqdn);
+  };
+
   public GetOwner = async (fqdn: string, chainId: EdnsChainId) => {
-    const { _name, _tld } = getKeccak256(fqdn);
-    const facet = this.edns.getRegistry(chainId);
-    try {
-      return await facet["getOwner(bytes32,bytes32)"](_name, _tld);
-    } catch (err) {
-      return err;
-    }
-  };
-
-  public GetName = async (fqdn: string, chainId: EdnsChainId) => {
-    const { _name, _tld } = getKeccak256(fqdn);
-    const facet = this.edns.getRegistry(chainId);
-    return await facet.callStatic["getName(bytes32,bytes32)"](_name, _tld);
-  };
-
-  public GetResolver = async (fqdn: string, chainId: EdnsChainId) => {
-    const { _name, _tld } = getKeccak256(fqdn);
-    const facet = this.edns.getRegistry(chainId);
-    return await facet.callStatic["getResolver(bytes32,bytes32)"](_name, _tld);
+    const factory = this.edns.getFactory(this.factoryType, chainId);
+    return await factory.getOwner(fqdn);
   };
 
   public GetExpiry = async (fqdn: string, chainId: EdnsChainId) => {
-    const { _name, _tld } = getKeccak256(fqdn);
-    const facet = this.edns.getRegistry(chainId);
-    return (
-      await facet.callStatic["getExpiry(bytes32,bytes32)"](_name, _tld)
-    ).toNumber();
+    const factory = this.edns.getFactory(this.factoryType, chainId);
+    return await factory.getExpiry(fqdn);
   };
 
-  public GetUser = async (fqdn: string, chainId: EdnsChainId) => {
-    const { _name, _tld } = getKeccak256(fqdn);
-    const facet = this.edns.getRegistry(chainId);
-    return (
-      await facet.callStatic["getUser(bytes32,bytes32)"](_name, _tld)
-    ).toString();
-  };
+  // public GetName = async (fqdn: string, chainId: EdnsChainId) => {
+  //   const factory = this.edns.getFactory(this.factoryType, chainId);
+  //   return await factory.getName(fqdn);
+  // };
 
-  public GetUserExpiry = async (fqdn: string, chainId: EdnsChainId) => {
-    const { _name, _tld } = getKeccak256(fqdn);
-    const facet = this.edns.getRegistry(chainId);
-    return (
-      await facet.callStatic["getUserExpiry(bytes32,bytes32)"](_name, _tld)
-    ).toNumber();
-  };
+  // public GetResolver = async (fqdn: string, chainId: EdnsChainId) => {
+  //   const factory = this.edns.getFactory(this.factoryType, chainId);
+  //   return await factory.getResolver(fqdn);
+  // };
 
-  public RegisterDomain = async () => {
-    throw new Error("Not implemented");
-  };
+  // public GetUser = async (fqdn: string, chainId: EdnsChainId) => {
+  //   const factory = this.edns.getFactory(this.factoryType, chainId);
+  //   return await factory.getUser(fqdn);
+  // };
 
-  public RenewDomain = async () => {
-    throw new Error("Not implemented");
-  };
+  // public GetUserExpiry = async (fqdn: string, chainId: EdnsChainId) => {
+  //   const factory = this.edns.getFactory(this.factoryType, chainId);
+  //   return await factory.getUserExpiry(fqdn);
+  // };
 }
