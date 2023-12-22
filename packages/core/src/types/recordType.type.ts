@@ -1,1 +1,2 @@
-export type RecordType = "typedText" | "text" | "address" | "typedAddress";
+export type RecordType = "text" | "address";
+export type TypedRecordType = "typedText" | "typedAddress";

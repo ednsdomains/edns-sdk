@@ -26,6 +26,8 @@ import {
   TypedAddress,
   typedAddressValues,
   typedTextValues,
+  TypedRecordType,
+  TypedText,
 } from "./types";
 import { namehash } from "ethers/lib/utils";
 import { getDomainType, getFqdnBytes } from "./utils";
@@ -114,21 +116,6 @@ export class EDNS {
 
     // Return an object with keys of type RecordType and values as functions accepting _host, _name, and _tld parameters.
     return {
-      typedText: async (
-        _host: Uint8Array,
-        _name: Uint8Array,
-        _tld: Uint8Array
-      ) => {
-        // Implementation for typedText record type
-        const getTypedText: any[] = [];
-        typedTextValues.forEach((type) => {
-          const _type = ethers.utils.toUtf8Bytes(type);
-          getTypedText.push(
-            resolver.callStatic.getTypedText(_host, _name, _tld, _type)
-          );
-        });
-        return await Promise.all(getTypedText);
-      },
       text: async (_host: Uint8Array, _name: Uint8Array, _tld: Uint8Array) => {
         // Implementation for text record type
         return await resolver.callStatic.getText(_host, _name, _tld);
@@ -141,20 +128,49 @@ export class EDNS {
         // Implementation for address record type
         return await resolver.callStatic.getAddress(_host, _name, _tld);
       },
+    };
+  }
+
+  private getTypedMethods(resolver: PublicResolver): {
+    [key in TypedRecordType]: (
+      _host: Uint8Array,
+      _name: Uint8Array,
+      _tld: Uint8Array,
+      _type: Uint8Array
+    ) => any;
+  } {
+    // Implementation of getMethods goes here
+    // Make sure to replace 'Resolver' with the appropriate type.
+
+    // Return an object with keys of type RecordType and values as functions accepting _host, _name, and _tld parameters.
+    return {
+      typedText: async (
+        _host: Uint8Array,
+        _name: Uint8Array,
+        _tld: Uint8Array,
+        _type: Uint8Array
+      ) => {
+        // Implementation for typedText record type
+        return await resolver.callStatic.getTypedText(
+          _host,
+          _name,
+          _tld,
+          _type
+        );
+      },
       typedAddress: async (
         _host: Uint8Array,
         _name: Uint8Array,
-        _tld: Uint8Array
+        _tld: Uint8Array,
+        _type: Uint8Array
       ) => {
         // Implementation for typedAddress record type
-        const getCoinAddress: any[] = [];
-        typedAddressValues.forEach((type) => {
-          const _type = ethers.utils.toUtf8Bytes(type);
-          getCoinAddress.push(
-            resolver.callStatic.getMultiCoinAddress(_host, _name, _tld, _type)
-          );
-        });
-        return await Promise.all(getCoinAddress);
+        return await resolver.callStatic.getMultiCoinAddress(
+          _host,
+          _name,
+          _tld,
+          _type
+        );
       },
     };
   }
@@ -168,6 +184,24 @@ export class EDNS {
     const resolver = this.getResolver(chainId);
 
     return await this.getMethods(resolver)[recordType](_host, _name, _tld);
+  }
+
+  public async getTypedRecords(
+    recordType: TypedRecordType,
+    host: string,
+    chainId: EdnsChainId,
+    type: TypedText | TypedAddress
+  ) {
+    const { _host, _name, _tld } = getFqdnBytes(host);
+    const _type = ethers.utils.toUtf8Bytes(type);
+    const resolver = this.getResolver(chainId);
+
+    return await this.getTypedMethods(resolver)[recordType](
+      _host,
+      _name,
+      _tld,
+      _type
+    );
   }
 
   public getRegistrarControllers(fqdn: string, chainId: EdnsChainId) {
@@ -187,7 +221,10 @@ export class EDNS {
 
   public getFactory(type: "chain" | "api", chainId?: EdnsChainId) {
     if (type === "chain" && chainId) {
-      return new ContractFactory(this.registries[chainId]);
+      return new ContractFactory({
+        registry: this.registries[chainId],
+        resolver: this.publicResolvers[chainId],
+      });
     } else {
       return new ApiFactory();
     }

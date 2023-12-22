@@ -1,45 +1,50 @@
 import { EDNS } from "../../core/src";
-import { EdnsChainId } from "../../core/src/types";
-import { TypedAddress, TypedText } from "./types";
+import { EdnsChainId, TypedAddress, TypedText } from "../../core/src/types";
 
 export class RecordManager {
   private edns: EDNS = EDNS.getInstance();
+  private factoryType: "chain" | "api" = "chain";
+
+  public constructor(factoryType: "chain" | "api") {
+    this.factoryType = factoryType;
+  }
 
   public GetAllRecords = async (fqdn: string, chainId: EdnsChainId) => {
     return {
       text: await this.GetTextRecord(fqdn, chainId),
-      typedText: await this.GetTypedTextRecords(fqdn, chainId),
+      // typedText: await this.GetTypedTextRecords(fqdn, chainId),
       address: await this.GetAddressRecord(fqdn, chainId),
-      typedAddress: await this.GetTypedAddressRecords(fqdn, chainId),
+      // typedAddress: await this.GetTypedAddressRecords(fqdn, chainId),
     };
   };
 
   public GetTextRecord = async (fqdn: string, chainId: EdnsChainId) => {
-    return await this.edns.getRecords("text", fqdn, chainId);
+    const factory = this.edns.getFactory(this.factoryType, chainId);
+    return await factory.getMethods()["text"](fqdn);
   };
-  public GetTypedTextRecords = async (fqdn: string, chainId: EdnsChainId) => {
-    return await this.edns.getRecords("typedText", fqdn, chainId);
-  };
-  public GetTypedTextRecordByType = async (
-    fqdn: string,
-    chainId: EdnsChainId,
-    type: TypedText
-  ) => {};
 
-  public GetAddressRecord = async (fqdn: string, chainId: EdnsChainId) => {
-    return await this.edns.getRecords("address", fqdn, chainId);
-  };
-  public GetTypedAddressRecords = async (
+  public GetTypedTextRecord = async (
     fqdn: string,
+    type: TypedText,
     chainId: EdnsChainId
   ) => {
-    return await this.edns.getRecords("typedAddress", fqdn, chainId);
+    const factory = this.edns.getFactory(this.factoryType, chainId);
+    return await factory.getTypedMethods()["typedText"](fqdn, type);
   };
-  public GetTypedAddressRecordByType = (
+
+  public GetAddressRecord = async (fqdn: string, chainId: EdnsChainId) => {
+    const factory = this.edns.getFactory(this.factoryType, chainId);
+    return await factory.getMethods()["address"](fqdn);
+  };
+
+  public GetTypedAddressRecord = async (
     fqdn: string,
-    chainId: EdnsChainId,
-    type: TypedAddress
-  ) => {};
+    type: TypedAddress,
+    chainId: EdnsChainId
+  ) => {
+    const factory = this.edns.getFactory(this.factoryType, chainId);
+    return await factory.getTypedMethods()["typedAddress"](fqdn, type);
+  };
 
   public GetSubDomainRecords = (fqdn: string, chainId: EdnsChainId) => {};
 }
