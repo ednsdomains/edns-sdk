@@ -3,8 +3,8 @@ import {
   getDomainType,
   getKeccak256,
 } from "../../core/src/utils";
-import { EdnsChainId } from "../../core/src/types";
-import { EDNS } from "../../core/src";
+import { EdnsChainId } from "@edns/core/dist";
+import { EDNS } from "../../core/src/edns";
 
 export class DomainManager {
   private edns: EDNS = EDNS.getInstance();

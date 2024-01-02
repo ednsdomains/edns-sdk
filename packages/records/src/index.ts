@@ -1,4 +1,4 @@
-import { EDNS } from "../../core/src";
+import { EDNS } from "../../core";
 import { EdnsChainId, TypedAddress, TypedText } from "../../core/src/types";
 
 export class RecordManager {

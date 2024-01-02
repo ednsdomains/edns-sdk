@@ -2,14 +2,8 @@ import { ethers, providers } from "ethers";
 import chains from "./data/chains.json";
 import contracts from "./data/contracts.json";
 import {
-  AddressResolver,
-  AddressResolver__factory,
   ClassicalRegistrarController,
   ClassicalRegistrarController__factory,
-  Diamond,
-  Diamond__factory,
-  DomainRecordFacet,
-  DomainRecordFacet__factory,
   IRegistry,
   IRegistry__factory,
   PublicResolver,
@@ -24,8 +18,6 @@ import {
   RecordType,
   EdnsChainId,
   TypedAddress,
-  typedAddressValues,
-  typedTextValues,
   TypedRecordType,
   TypedText,
 } from "./types";
