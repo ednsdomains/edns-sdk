@@ -1,10 +1,4 @@
-import {
-  getFqdnBytes,
-  getDomainType,
-  getKeccak256,
-} from "../../core/src/utils";
-import { EdnsChainId } from "@edns/core/dist";
-import { EDNS } from "../../core/src/edns";
+import { EdnsChainId, getFqdnBytes, EDNS } from "@edns/core";
 
 export class DomainManager {
   private edns: EDNS = EDNS.getInstance();
@@ -34,7 +28,7 @@ export class DomainManager {
         _tld
       );
       return Promise.race([
-        promise.catch((err) => {
+        promise.catch((err: any) => {
           err;
         }),
         new Promise((_, reject) =>
