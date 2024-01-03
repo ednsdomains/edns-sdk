@@ -12,7 +12,7 @@
   "keywords": [
     "edns",
     "edns-sdk",
-    "edns-core",
+    "edns-records",
     "web3"
   ],
   "scripts": {
