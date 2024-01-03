@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist-cjs",
+  },
+  "extends": "../../tsconfig.cjs.json",
+  "include": ["src/", "index.ts"],
+  "exclude": ["node_modules"]
+}
