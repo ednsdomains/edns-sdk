@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./dist-es",
-    "baseUrl": "."
   },
   "extends": "../../tsconfig.es.json",
-  "include": ["src/"],
+  "include": ["src/", "index.ts"],
   "exclude": ["node_modules"]
 
 }
