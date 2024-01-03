@@ -1,1 +1,0 @@
-export { GetEdnsProvider } from './provider';
