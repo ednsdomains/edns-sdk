@@ -1,0 +1,37 @@
+{
+  "name": "@ednsdomains/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist-cjs/index.js",
+  "module": "./dist-es/index.js",
+  "types": "./dist-types/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist-*/**"
+  ],
+  "keywords": [
+    "edns",
+    "edns-sdk",
+    "edns-core",
+    "web3"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "concurrently 'npm run build:cjs' 'npm run build:es' 'npm run build:types'",
+    "build:cjs": "tsc -p tsconfig.cjs.json && npm run lint",
+    "build:es": "tsc -p tsconfig.es.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "lint": "node ./scripts/lint.js",
+    "clean": "rimraf ./dist-* && rimraf *.tsbuildinfo"
+  },
+  "author": "EDNS Foundation Developer Team",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "ethers": "^5.7.2"
+  }
+}

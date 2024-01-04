@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "declarationDir": "./dist-types",
+  },
+  "extends": "../../tsconfig.types.json",
+  "include": ["src/", "index.ts"],
+  "exclude": ["node_modules"]
+
+}
