@@ -1,12 +1,9 @@
 # EDNS SDK for JavaScript
 
-[![NPM version](https://img.shields.io/npm/v/@edns/core.svg)](https://www.npmjs.com/package/@edns/core)
-[![NPM downloads](https://img.shields.io/npm/dm/@edns/core.svg)](https://www.npmjs.com/package/@edns/core)
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.svg)](https://gitter.im/@edns/core)
-
-[![Build Status](https://travis-ci.org/@edns/core.svg?branch=master)](https://travis-ci.org/ednsdomains/edns-sdk)
-[![Coverage Status](https://codecov.io/gh/@edns/core/branch/master/graph/badge.svg)](https://codecov.io/gh/ednsdomains/edns-sdk)
-[![Known Vulnerabilities](https://snyk.io/test/github/@edns/core/badge.svg)](https://snyk.io/test/github/ednsdomains/edns-sdk)
+[![NPM version](https://img.shields.io/npm/v/@ednsdomains/core.svg)](https://www.npmjs.com/package/@ednsdomains/core)
+[![NPM downloads](https://img.shields.io/npm/dm/@ednsdomains/core.svg)](https://www.npmjs.com/package/@ednsdomains/core)
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.svg)](https://gitter.im/@ednsdomains/core)
+[![Known Vulnerabilities](https://snyk.io/test/github/@ednsdomains/core/badge.svg)](https://snyk.io/test/github/ednsdomains/edns-sdk)
 
 ## Abstract 
 The EDNS SDK is a comprehensive toolkit designed to seamlessly integrate with the [EDNS smart contract](https://github.com/ednsdomains/contracts/tree/develop) and [resolver API](https://github.com/One2Cloud/resolver-gdn). It empowers developers by providing an intuitive set of tools and resources for connecting, managing, and interacting with the EDNS ecosystem. With this SDK, users can effortlessly harness the full potential of EDNS's advanced blockchain functionalities to create robust and innovative decentralized applications.

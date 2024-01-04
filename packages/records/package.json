@@ -1,5 +1,5 @@
 {
-  "name": "@edns/records",
+  "name": "@ednsdomains/records",
   "version": "1.0.0",
   "description": "",
   "main": "./dist-cjs/index.js",
@@ -32,7 +32,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@edns/core": "^1.0.6",
+    "@ednsdomains/core": "^1.0.0",
     "ethers": "^6.9.0"
   }
 }

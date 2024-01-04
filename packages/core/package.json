@@ -1,6 +1,6 @@
 {
-  "name": "@edns/core",
-  "version": "1.0.6",
+  "name": "@ednsdomains/core",
+  "version": "1.0.0",
   "description": "",
   "main": "./dist-cjs/index.js",
   "module": "./dist-es/index.js",
